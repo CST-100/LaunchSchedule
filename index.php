@@ -88,7 +88,7 @@
         
         All times are displayed in your local time. <a href="//ipeer.auron.co.uk/launchschedule/api/1/launches/" target="_blank">API data</a> will be acquired every 5 minutes when outside and every 1 minute while inside a launch.<br />All launches will be displayed until they are 1 hour past their launch time.
         
-        <span class="versionString">Deployed from <?php echo "<a class=\"github\" href=\"https://github.com/iPeer/LaunchSchedule/commit/".$lhash."\" target=\"_blank\">".$shash."</a>"; ?></span>
+        <span class="versionString">Deployed from <?php echo "<a class=\"github\" href=\"https://github.com/iPeer/LaunchSchedule/commit/".$lhash."\" target=\"_blank\">".$shash."</a>."; ?></span>
         
     </div>
 

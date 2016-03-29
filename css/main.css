@@ -357,7 +357,16 @@ div.launch span[class^='countdown'] {
 }
 
 div.footer {
+    margin-top: 1em;
     display: block;
+    font-size: 0.75em;
+}
+
+a.github {
+    text-decoration: none;
+    border-bottom: 1px dotted;
+    background-image: url(../bg/GitHub-Mark-Light-32px.png) no-repeat;
+    padding-left: 15px;
 }
 
 div.flextest {
