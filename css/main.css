@@ -203,14 +203,14 @@ span.optionsTagLine {
     width: 49%
 }
 
-span.versionString {
+/*span.versionString {
     display: inline-block;
     text-align: right;
     font-size: 12px;
     float: right;
     padding-top: 2px;
     min-width: 50%;
-}
+}*/
 
 input.optionCheck, input.optionCheck + label {
     cursor: pointer;

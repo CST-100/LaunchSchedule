@@ -55,7 +55,7 @@
         </div>
         <div class="optionsPanelFooter">
             <span class="optionsTagLine">Nothing here works; it isn't finished!</span>
-            <span class="versionString">Version data: <?php include("apis/pageversion.php"); ?></span>
+            <span class="versionString">Version data: <?php $f=file("commit");echo $f[0]; ?></span>
         </div>
         
     </div>
@@ -80,7 +80,10 @@
         
         All times are displayed in your local time. <a href="//ipeer.auron.co.uk/launchschedule/api/1/launches/" target="_blank">API data</a> will be acquired every 5 minutes when outside and every 1 minute while inside a launch.<br />All launches will be displayed until they are 1 hour past their launch time.
         
+        <span class="versionString">Deployed from <?php $f=file("commit");echo $f[0]; ?></span>
+        
     </div>
+
     
 </body>
 </html>
