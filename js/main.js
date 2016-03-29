@@ -97,13 +97,14 @@ $(document).ready(
         });*/
         
         getAPIData();
+        setInterval(checkVersion, 1800000); /* 30 minutes */
     }
 );
 
 function getAPIData() {
 
 	UPDATE_IN_PROGRESS = true;
-	var _json = $.getJSON("//ipeer.auron.co.uk/launchschedule/api/1/launches?limit="+RESULT_COUNT)
+	var _json = $.getJSON("//ipeer.auron.co.uk/launchschedule/api/1/launches/?limit="+RESULT_COUNT)
     .done(
         function (data) {
 
@@ -466,6 +467,21 @@ function getCountdownString(secs) {
     else { time = time.substr(0, time.length - 2); }
     
     return time;
+}
+
+function checkVersion() {
+    var currentVersion = $('meta[name=version]').attr("content");
+    var pageType = window.location.href.split('?')[0].split('/launchschedule/')[1].slice(0, -1);
+    if (pageType != "beta" && pageType != "") { pageType = "beta"; }
+    if (pageType == "") { pageType = "stable"; }
+    var _json = $.getJSON("//ipeer.auron.co.uk/launchschedule/api/1/version/")
+    .done(
+        function (data) {
+
+            var newVersion = data[pageType]['full'];
+            if (currentVersion != newVersion) { $("div.updateNotification").slideToggle(); }
+
+	})
 }
 
 function createSettings() {

@@ -68,7 +68,10 @@
         
     </div>-->
     
+    <a class="updateNotification" href="./"><div class="updateNotification">This page has recieved an update since you started viewing it. Click here to reload the page and use the latest version.</div></a>
+    
     <div class="container">
+    
     
         <!--<div class="launches">Awaiting downlink, please stand by...<br /><font style="font-size: 12px;">(If you have JavaScript disabled, you're going to be waiting a <font style="font-style: bold;">very</font> long time...)</font></div>-->
         

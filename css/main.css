@@ -418,3 +418,22 @@ a {
 a:hover {
     color: crimson;
 }
+
+a.updateNotification {
+    text-decoration: none;
+    margin-top: 2em;
+}
+
+div.updateNotification { 
+    min-width: 40em;
+    max-width: 60em;
+    margin: 2em auto 0 auto;
+    text-align: center;
+    clear: both;
+    border: 3px solid;
+    background-color: #f1f9f7;
+    border-color: #e0f1e9;
+    color: #1d9d74;
+    padding: 0.5em;
+    display: none;
+}
