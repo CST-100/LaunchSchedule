@@ -40,7 +40,7 @@
             <i class="controlButton sourcesAndCredits fa fa-info-circle"></i>
             <i class="controlButton pageOptions fa fa-cog fa-lg"></i>
             <i class="controlButton playPause fa fa-pause"></i>
-            <span class="updateTimer">05:00</span>
+            <span class="updateTimer hoverable" title="Time until next page update">05:00</span>
         
             
         </div>
