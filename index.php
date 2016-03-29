@@ -1,16 +1,24 @@
+<?php
+
+    $f=file("commit");
+    $shash = $f[0];
+    $lhash = $f[1];
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
 <meta name="description" content="A list of upcoming rocket launches"/>
 <meta name="keywords" content="iPeer,Space,Flight,Rocket,Launch,Countdown,Timer"/>
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="css/main.css?v=<?php echo filemtime("css/main.css"); ?>"/>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="version" content="<?php echo $lhash; ?>" />
+<link rel="stylesheet" type="text/css" href="css/main.css?v=<?php echo $shash ?>"/>
 <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
 <link href='//fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 <title>Upcoming Rocket Launch countdowns</title>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="js/main.js?v=<?php echo filemtime("js/main.js"); ?>"></script>
+<script src="js/main.js?v=<?php echo $shash ?>"></script>
 </head>
 <body>
 	<!-- I know people hate this stuff, but I'm curious as to how many people actually use this page :o -->
@@ -37,8 +45,8 @@
             <div class="searchHugger"><input class="searchBox" type="text" placeholder="Search rockets and payloads"></input>
             <i class="searchClear fa fa-close"></i>
             </div>
-            <i class="controlButton sourcesAndCredits fa fa-info-circle"></i>
-            <i class="controlButton pageOptions fa fa-cog fa-lg"></i>
+            <!--<i class="controlButton sourcesAndCredits fa fa-info-circle"></i>
+            <i class="controlButton pageOptions fa fa-cog fa-lg"></i>-->
             <i class="controlButton playPause fa fa-pause"></i>
             <span class="updateTimer hoverable" title="Time until next page update">05:00</span>
         
@@ -47,7 +55,7 @@
     
     </div>
     
-    <div class="optionsPane">
+    <!--<div class="optionsPane">
         <i class="optionsClose fa fa-close fa-lg"></i>
         <div class="optionsCheckboxes">
             <input type="checkbox" class="optionCheck" id="a"><label class="optionsLabel" for="a">Option A</label></input><br />
@@ -55,10 +63,10 @@
         </div>
         <div class="optionsPanelFooter">
             <span class="optionsTagLine">Nothing here works; it isn't finished!</span>
-            <span class="versionString">Version data: <?php $f=file("commit");echo $f[0]; ?></span>
+            <span class="versionString">Version data: _______</span>
         </div>
         
-    </div>
+    </div>-->
     
     <div class="container">
     
@@ -80,7 +88,7 @@
         
         All times are displayed in your local time. <a href="//ipeer.auron.co.uk/launchschedule/api/1/launches/" target="_blank">API data</a> will be acquired every 5 minutes when outside and every 1 minute while inside a launch.<br />All launches will be displayed until they are 1 hour past their launch time.
         
-        <span class="versionString">Deployed from <?php $f=file("commit");echo $f[0]; ?></span>
+        <span class="versionString">Deployed from <?php echo "<a class=\"github\" href=\"https://github.com/iPeer/LaunchSchedule/commit/".$lhash."\" target=\"_blank\">".$shash."</a>"; ?></span>
         
     </div>
 
