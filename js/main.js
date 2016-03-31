@@ -406,7 +406,9 @@ function updateTimers() {
 		else { tString = time; }
 		
 		//console.log("---> "+tString);
-        tString += " / "+getCountdownDay(launch);
+        if (secs >= 3600) {
+            tString += " / "+getCountdownDay(launch);
+        }
 
 		$(".countdown-"+id).html(tString);
 
