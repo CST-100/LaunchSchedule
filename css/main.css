@@ -357,7 +357,18 @@ div.launch span[class^='countdown'] {
 }
 
 div.footer {
+    margin-top: 1em;
     display: block;
+    font-size: 0.75em;
+}
+
+a.github {
+    text-decoration: none;
+    border-bottom: 1px dotted;
+    background-image: url(../bg/GitHub-Mark-Light-32px.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding-left: 1.5em;
 }
 
 div.flextest {
@@ -406,4 +417,36 @@ a {
 
 a:hover {
     color: crimson;
+}
+
+div.launchNotification {
+    min-width: 64em;
+    max-width: 64em;
+    margin: 2em auto 0 auto;
+    text-align: center;
+    clear: both;
+    padding: 0.5em;
+    background: pink;
+    border: 3px solid red;
+    color: black;
+    display: none;
+}
+
+a.updateNotification {
+    text-decoration: none;
+    margin-top: 2em;
+}
+
+div.updateNotification { 
+    min-width: 40em;
+    max-width: 60em;
+    margin: 2em auto 0 auto;
+    text-align: center;
+    clear: both;
+    border: 3px solid;
+    background-color: #f1f9f7;
+    border-color: #e0f1e9;
+    color: #1d9d74;
+    padding: 0.5em;
+    display: none;
 }

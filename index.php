@@ -22,7 +22,7 @@
 </head>
 <body>
 	<!-- I know people hate this stuff, but I'm curious as to how many people actually use this page :o -->
-	<!--<script>
+	<script>
   	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -31,7 +31,7 @@
   	ga('create', 'UA-36872483-3', 'auto');
   	ga('send', 'pageview');
 
-	</script>-->
+	</script>
     
     <div class="topBar gradientBlack">
     
@@ -68,7 +68,12 @@
         
     </div>-->
     
+    <a class="updateNotification" href="./"><div class="updateNotification">This page has recieved an update since you started viewing it. Click here to reload the page and use the latest version.</div></a>
+    
+    <div class="launchNotification">A launch is currently in progress! During this time, this page will request API data at an elevated rate to keep things updated!</div>
+    
     <div class="container">
+    
     
         <!--<div class="launches">Awaiting downlink, please stand by...<br /><font style="font-size: 12px;">(If you have JavaScript disabled, you're going to be waiting a <font style="font-style: bold;">very</font> long time...)</font></div>-->
         
@@ -88,7 +93,7 @@
         
         All times are displayed in your local time. <a href="//ipeer.auron.co.uk/launchschedule/api/1/launches/" target="_blank">API data</a> will be acquired every 5 minutes when outside and every 1 minute while inside a launch.<br />All launches will be displayed until they are 1 hour past their launch time.
         
-        <span class="versionString">Deployed from <?php echo "<a class=\"github\" href=\"https://github.com/iPeer/LaunchSchedule/commit/".$lhash."\" target=\"_blank\">".$shash."</a>"; ?></span>
+        <span class="versionString">Deployed from <?php echo "<a class=\"github\" href=\"https://github.com/iPeer/LaunchSchedule/commit/".$lhash."\" target=\"_blank\">".$shash."</a>."; ?></span>
         
     </div>
 
