@@ -419,6 +419,19 @@ a:hover {
     color: crimson;
 }
 
+div.launchNotification {
+    min-width: 64em;
+    max-width: 64em;
+    margin: 2em auto 0 auto;
+    text-align: center;
+    clear: both;
+    padding: 0.5em;
+    background: pink;
+    border: 3px solid red;
+    color: black;
+    display: none;
+}
+
 a.updateNotification {
     text-decoration: none;
     margin-top: 2em;

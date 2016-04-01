@@ -422,7 +422,7 @@ function updateTimers() {
 		IS_INSIDE_LAUNCH = true;
 		TIME_BETWEEN_UPDATES = 60;
 		if (PAGE_UPDATE_IN > 60) { PAGE_UPDATE_IN = 60; }
-		// TODO: Toggle a div
+		$("div.launchNotification").slideToggle();
 
 	}
 
@@ -430,7 +430,7 @@ function updateTimers() {
 
 		IS_INSIDE_LAUNCH = false;
 		TIME_BETWEEN_UPDATES = 300;
-		// TODO: Toggle a div
+		$("div.launchNotification").slideToggle();
 
 	}
 

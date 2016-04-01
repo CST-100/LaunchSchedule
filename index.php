@@ -70,6 +70,8 @@
     
     <a class="updateNotification" href="./"><div class="updateNotification">This page has recieved an update since you started viewing it. Click here to reload the page and use the latest version.</div></a>
     
+    <div class="launchNotification">A launch is currently in progress! During this time, this page will request API data at an elevated rate to keep things updated!</div>
+    
     <div class="container">
     
     
