@@ -1,7 +1,7 @@
 <?php
 
     $f=file("commit");
-    $shash = $f[0];
+    $shash = str_replace(array("\n", "\r"), "", $f[0]);
     $lhash = $f[1];
 
 ?>
