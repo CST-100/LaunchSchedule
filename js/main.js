@@ -223,6 +223,11 @@ function updatePageInfo() {
             if ("url" in launch) {
                 thisHTML += "<a href=\""+launch['url']+"\" target=\"_blank\" title=\"View payload information\"><i class=\"launchIcons payloadInfo fa fa-info-circle fa-fw\"></i></a>";
             }
+            console.log(launch);
+            if (launch['hasWeather']) {
+                
+                
+            }
                 
             thisHTML += "</span>";
                 
