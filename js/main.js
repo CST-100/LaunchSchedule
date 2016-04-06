@@ -223,6 +223,12 @@ function updatePageInfo() {
             if ("url" in launch) {
                 thisHTML += "<a href=\""+launch['url']+"\" target=\"_blank\" title=\"View payload information\"><i class=\"launchIcons payloadInfo fa fa-info-circle fa-fw\"></i></a>";
             }
+            console.log(launch);
+            if (launch['hasWeather']) {
+                
+                thisHTML += "<a href=\""+launch['weatherURL']+"\" target=\"_blank\" title=\"View weather report\"><i class=\"launchIcon launchWeather fa fa-cloud fa-fw\"></i></a>";
+                
+            }
                 
             thisHTML += "</span>";
                 
