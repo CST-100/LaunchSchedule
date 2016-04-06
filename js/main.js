@@ -226,6 +226,7 @@ function updatePageInfo() {
             console.log(launch);
             if (launch['hasWeather']) {
                 
+                thisHTML += "<a href=\""+launch['weatherURL']+"\" target=\"_blank\" title=\"View weather report\"><i class=\"launchIcon launchWeather fa fa-cloud fa-fw\"></i></a>";
                 
             }
                 
