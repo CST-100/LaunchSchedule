@@ -215,7 +215,10 @@ function updatePageInfo() {
                 var arr = launch['streamURLs'];
                 arr.forEach(function(l) {
                     
-                    thisHTML += "<a href=\""+l+"\" target=\"_blank\" title=\"Watch launch coverage\"><i class=\"launchIcon launchStream fa fa-tv fa-fw\"></i></a>";
+                    var buttonClass = "fa-tv";
+                    if (l.indexOf("youtube.com") > -1 || l.indexOf("youtu.be") > -1) { buttonClass = "fa-youtube-play"; }
+                    
+                    thisHTML += "<a href=\""+l+"\" target=\"_blank\" title=\"Watch launch coverage\"><i class=\"launchIcon launchStream fa "+buttonClass+" fa-fw\"></i></a>";
                 
                 });
             }
@@ -223,7 +226,6 @@ function updatePageInfo() {
             if ("url" in launch) {
                 thisHTML += "<a href=\""+launch['url']+"\" target=\"_blank\" title=\"View payload information\"><i class=\"launchIcons payloadInfo fa fa-info-circle fa-fw\"></i></a>";
             }
-            console.log(launch);
             if (launch['hasWeather']) {
                 
                 thisHTML += "<a href=\""+launch['weatherURL']+"\" target=\"_blank\" title=\"View weather report\"><i class=\"launchIcon launchWeather fa fa-cloud fa-fw\"></i></a>";
