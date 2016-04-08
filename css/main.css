@@ -372,10 +372,6 @@ div.footer {
 a.github {
     text-decoration: none;
     border-bottom: 1px dotted;
-    background-image: url(../bg/GitHub-Mark-Light-32px.png);
-    background-repeat: no-repeat;
-    background-size: contain;
-    padding-left: 1.5em;
 }
 
 div.flextest {
