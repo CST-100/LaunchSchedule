@@ -231,6 +231,11 @@ function updatePageInfo() {
                 thisHTML += "<a href=\""+launch['weatherURL']+"\" target=\"_blank\" title=\"View weather report\"><i class=\"launchIcon launchWeather fa fa-cloud fa-fw\"></i></a>";
                 
             }
+            if (launch['hasPressKit']) {
+                
+                thisHTML += "<a href=\""+launch['pressKitURL']+"\" target=\"_blank\" title=\"View presskit\"><i class=\"launchIcon launchPressKit fa fa-file-text fa-fw\"></i></a>";
+                
+            }
                 
             thisHTML += "</span>";
                 
