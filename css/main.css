@@ -68,12 +68,14 @@ div.footer {
 
 div.topBar {
     z-index: 9001;
-    min-height: 30px;
+    max-height: 30px;
     width: 100%;
     line-height: 30px;
     box-shadow: 0 0 5px #000;
-    vertical-align: middle;
     color: bisque;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
 }
 
 span.pageTitle {
@@ -95,7 +97,6 @@ div.container {
 
 div.titleAndStatus {
     width: auto;
-    float: left;
     padding-left: 5px;
 }
 
@@ -112,7 +113,8 @@ div.pageControls {
     height: 30px;
     line-height: 30px;
     width: auto;
-    float: right;
+    /*float: right;*/
+    text-align: right;
 }
 
 i.controlButton {
@@ -127,6 +129,19 @@ i.controlButton {
     text-shadow: 0 0 5px #000;
 }
 
+span.updateTimer {
+    color: crimson;
+    margin-right: 5px;
+    font-size: 15px;
+    line-height: 30px;
+    text-shadow: 0 0 5px #000;
+    width: 2.25em;
+    max-width: 2.26em;
+    text-align: left;
+    display: inline-block;
+    padding-right: 5px;
+}
+
 i.controlButton:hover {
     background: #049CDB; /* ancient technology */
     background: -khtml-gradient(linear, left top, left bottom, from(#0064FF), to(#0064CD));
@@ -136,14 +151,6 @@ i.controlButton:hover {
     background: -webkit-linear-gradient(top, #0064FF, #0064CD);
     background: -o-linear-gradient(top, #0064CD, #0064FF);
     background: linear-gradient(top, #0064FF, #0064CD);
-}
-
-span.updateTimer {
-    color: crimson;
-    margin-right: 5px;
-    font-size: 15px;
-    line-height: 30px;
-    text-shadow: 0 0 5px #000;
 }
 
 div.searchHugger {
