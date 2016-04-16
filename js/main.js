@@ -12,6 +12,7 @@ Date.prototype.dst = function() {
     return this.getTimezoneOffset() < this.stdTimezoneOffset();
 }
 
+
 // VARIABLES
 var OPTIONS_OPEN = false;
 var UPDATING_PAUSED = false;
@@ -95,6 +96,8 @@ $(document).ready(
             }
 
         });*/
+        
+        if (window.location.href.indexOf("/beta/") > -1) { $("i.betaButton").hide(); }
         
         getAPIData();
         setInterval(checkVersion, 1800000); /* 30 minutes */
