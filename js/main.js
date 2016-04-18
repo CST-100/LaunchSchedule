@@ -12,6 +12,7 @@ Date.prototype.dst = function() {
     return this.getTimezoneOffset() < this.stdTimezoneOffset();
 }
 
+
 // VARIABLES
 var OPTIONS_OPEN = false;
 var UPDATING_PAUSED = false;
@@ -95,6 +96,8 @@ $(document).ready(
             }
 
         });*/
+        
+        if (window.location.href.indexOf("/beta/") > -1) { $("i.betaButton").hide(); }
         
         getAPIData();
         setInterval(checkVersion, 1800000); /* 30 minutes */
@@ -312,9 +315,12 @@ function toggleUpdating() {
 function getCountdownDay(launch) {
     
     var epoch = launch['launchtime_epoch'] * 1000;
+    var win_epoch = launch['windowcloses_epoch'] * 1000;
     
     var date = new Date(epoch);
     var date_now = new Date();
+    
+    var date_closes = new Date(win_epoch);
     
     var overWeek = Math.abs((date.getTime() - date_now.getTime())) >= (518400 * 1000);
     //var overWeek = Math.abs((date_now.getTime() - date.getTime())) >= 604800;
@@ -329,6 +335,21 @@ function getCountdownDay(launch) {
         var time = pad(applyMilitary(date.getHours()))+":"+pad(date.getMinutes())+(date.getSeconds() > 0 ? ":"+pad(date.getSeconds()) : "");
         var month = MONTHS_LONG[date.getMonth()];
         var day = ord(date.getDate());
+        if (epoch < win_epoch) {
+            
+            if (date_closes.getDay() > date.getDay()) {
+                month = MONTHS[date.getMonth()];
+                var _time = "&dash;"+pad(applyMilitary(date_closes.getHours()))+":"+pad(date_closes.getMinutes())+(date_closes.getSeconds() > 0 ? ":"+pad(date_closes.getSeconds()) : "");
+                var month = MONTHS[date_closes.getMonth()];
+                day += _time+" "+ord(date_closes.getDate());
+                
+            }
+            else {
+                time += "&dash;"+pad(applyMilitary(date_closes.getHours()))+":"+pad(date_closes.getMinutes())+(date_closes.getSeconds() > 0 ? ":"+pad(date_closes.getSeconds()) : "");
+            }
+            
+        }
+
         
         if (delayed || monthonly) { return month+(!monthonly?" "+day:""); }
         
@@ -337,8 +358,27 @@ function getCountdownDay(launch) {
     }
     else {
         var time = pad(applyMilitary(date.getHours()))+":"+pad(date.getMinutes())+(date.getSeconds() > 0 ? ":"+pad(date.getSeconds()) : "");
+        
         var dayDiff = date.getDate() - date_now.getDate();
         var day = (dayDiff == 0 ? "Today" : (dayDiff == 1 ? "Tomorrow" : DAYS[date.getDay()]));
+        
+        if (epoch < win_epoch) {
+            
+            if (date_closes.getDay() > date.getDay()) {
+                
+                var _dayDiff = date_closes.getDate() - date_now.getDate();
+                var _day = (_dayDiff == 0 ? "Today" : (_dayDiff == 1 ? "Tomorrow" : DAYS[date_closes.getDay()]));
+                var _time = "&dash;"+pad(applyMilitary(date_closes.getHours()))+":"+pad(date_closes.getMinutes())+(date_closes.getSeconds() > 0 ? ":"+pad(date_closes.getSeconds()) : "");
+                
+                day += _time+" "+day;
+                
+            }
+            else {
+                time += "&dash;"+pad(applyMilitary(date_closes.getHours()))+":"+pad(date_closes.getMinutes())+(date_closes.getSeconds() > 0 ? ":"+pad(date_closes.getSeconds()) : "");
+            }
+            
+        }
+        
         return time+" "+day;
     }
     

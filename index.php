@@ -47,6 +47,7 @@
             </div>
             <!--<i class="controlButton sourcesAndCredits fa fa-info-circle"></i>
             <i class="controlButton pageOptions fa fa-cog fa-lg"></i>-->
+            <i class="controlButton betaButton" title="View the beta page"><a href="./beta/">BETA</a></i>
             <i class="controlButton playPause fa fa-pause"></i>
             <span class="updateTimer hoverable" title="Time until next page update">05:00</span>
         
