@@ -109,7 +109,8 @@ $(document).ready(
         
         if (window.location.href.indexOf("/beta/") > -1) { $("i.betaButton").hide(); }
         
-        getAPIData();
+        if (HISTORY_MODE) { HISTORY_MODE = false; switchMode(); }
+        else { getAPIData(); }
         setInterval(checkVersion, 1800000); /* 30 minutes */
     }
 );
