@@ -134,7 +134,7 @@ function switchMode() {
         }
     );
     ANIMATE_UPDATE = true;
-    $(".launches").fadeOut(function() { getAPIData(); });
+    $(".loadIndicator").fadeIn(function() { getAPIData(); });
     $(".pageTitle").fadeIn();
 }
 
