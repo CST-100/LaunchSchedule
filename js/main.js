@@ -411,14 +411,14 @@ function getCountdownDay(launch) {
         
         if (delayed || monthonly) { return month+(!monthonly?" "+day:""); }
         
-        return time+", "+month+" "+day+(date.dst()?LAUNCH_DAYLIGHTSAVINGS_HTML:"");
+        return time+", "+month+" "+day+(date.getYear() != date_now.getYear() && HISTORY_MODE ? " "+date.getFullYear() : "")+(date.dst()?LAUNCH_DAYLIGHTSAVINGS_HTML:"");
     
     }
     else {
         var time = pad(applyMilitary(date.getHours()))+":"+pad(date.getMinutes())+(date.getSeconds() > 0 ? ":"+pad(date.getSeconds()) : "");
         
         var dayDiff = date.getDate() - date_now.getDate();
-        var day = (dayDiff == 0 ? "Today" : (dayDiff == 1 ? "Tomorrow" : DAYS[date.getDay()]));
+        var day = (dayDiff == 0 ? "Today" : (dayDiff == 1 ? "Tomorrow" : (dayDiff == -1 ? "Yesterday" : DAYS[date.getDay()])));
         
         if (epoch < win_epoch) {
             
