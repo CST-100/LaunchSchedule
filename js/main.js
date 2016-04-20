@@ -107,7 +107,7 @@ $(document).ready(
 
         });*/
         
-        if (window.location.href.indexOf("/beta/") > -1) { $("i.betaButton").hide(); }
+        if (window.location.href.indexOf("/beta/") > -1) { $("span.betaButton").hide(); }
         
         if (HISTORY_MODE) { HISTORY_MODE = false; switchMode(); }
         else { getAPIData(); }
