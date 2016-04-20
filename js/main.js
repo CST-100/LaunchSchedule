@@ -26,7 +26,8 @@ var UPDATE_IN_PROGRESS = false;
 var PAGE_UPDATE_IN = 0;
 var TIME_BETWEEN_UPDATES = 300;
 var MAX_RESULTS = 0;
-var RESULT_COUNT = 21/*12*/;
+var DEFAULT_RESULT_COUNT = 21;
+var RESULT_COUNT = DEFAULT_RESULT_COUNT;
 var LAUNCH_DATA = [];
 var FIRST_UPDATE = true;
 var ANIMATE_UPDATE = false;
@@ -55,7 +56,8 @@ var INSIDE_LAUNCH_MAX = 3600;
 var INSIDE_LAUNCH_MIN = -3600;
 var IS_INSIDE_LAUNCH = false;
 var IS_DEBUG = false;
-var LOADING_HTML = "<div class=\"launchesLoading\">Acquiring launch data, please stand by...</div>";
+var SHOWMORE_DEFAULT_HTML = "<i class=\"fa fa-caret-down fa-fw\"></i>Show more launches<i class=\"fa fa-caret-down fa-fw\"></i>";
+var SHOW_MORE_VISIBLE = false;
 
 var SEARCH_GO_FUNCTION = function() { $(".loadIndicator").fadeIn(function() { updatePageInfo(); }); };
 var SEARCH_INTERVAL_ID = 0;
@@ -79,6 +81,7 @@ $(document).ready(
         $(".playPause").click(function(){toggleUpdating();});
         $(".searchClear").click(function(){$(".searchBox").val("");updatePageInfo();UPDATE_IN_PROGRESS=true;updateTimers();UPDATE_IN_PROGRESS=false;})
         $(".historyButton").click(function(){switchMode();});
+        $(".showMore").click(function(){showMore();});
         /*$("[class^='launch-']").click(function() { 
             var me = "."+$(this).attr('class').split(" ")[0];
             console.log(me);
@@ -116,6 +119,8 @@ $(document).ready(
 );
 
 function switchMode() {
+    RESULT_COUNT = DEFAULT_RESULT_COUNT;
+    if (SHOW_MORE_VISIBLE) { SHOW_MORE_VISIBLE = false; $(".showMore").slideToggle(); }
     HISTORY_MODE = !HISTORY_MODE;
     $(".historyButton").css({minWidth: "155px"});
     $(".pageTitle").fadeOut(
@@ -138,6 +143,19 @@ function switchMode() {
     $(".pageTitle").fadeIn();
 }
 
+function showMore() {
+    RESULT_COUNT += 4;
+    $(".showMore").html("<img src=\""+$('.loadIndicator').attr('src')+"\" />");
+    getAPIData();
+    $(".showMore").html(SHOWMORE_DEFAULT_HTML);
+    $("html, body").animate({scrollTop: $(".showMore").offset().top});
+    checkShowMoreAvailable();
+}
+
+function checkShowMoreAvailable() {
+    if (RESULT_COUNT >= MAX_RESULTS && SHOW_MORE_VISIBLE) { SHOW_MORE_VISIBLE = false; $(".showMore").slideToggle(); }
+}
+
 function getAPIURL() {
     return (HISTORY_MODE ? "//ipeer.auron.co.uk/launchschedule/api/1/launches/?history=true&orderby=launchtime&order=DESC&limit="+RESULT_COUNT+"&cutoff="+Math.floor(new Date().getTime() / 1000) : "//ipeer.auron.co.uk/launchschedule/api/1/launches/?limit="+RESULT_COUNT);
 }
@@ -153,8 +171,6 @@ function getAPIData() {
             //console.log("---> "+data['launches'].length);
 
             MAX_RESULTS = data['maxcount'];
-
-            // TODO: "Show More"
 
             LAUNCH_DATA = data['launches'];
 
@@ -311,6 +327,7 @@ function updatePageInfo() {
         FIRST_UPDATE = false;
     }
     $(".loadIndicator").fadeOut();
+    if (RESULT_COUNT < MAX_RESULTS && !SHOW_MORE_VISIBLE) { SHOW_MORE_VISIBLE = true; $(".showMore").slideToggle(); }
 
 }
 

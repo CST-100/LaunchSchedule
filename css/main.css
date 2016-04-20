@@ -244,6 +244,19 @@ input.optionCheck, input.optionCheck + label {
 
 /* Launches stuff */
 
+div.showMore {
+    text-align: center;
+    background-color: #434343;
+    background-image: url(../bg/lbg2.png);
+    max-width: 51.575em;
+    padding: 0.3125em;
+    width: 51.575em;
+    font-size: 1.25em;
+    color: bisque;
+    margin: 1em auto;
+    display: none;
+}
+
 .hoverable {
     cursor: help;
 }
@@ -429,6 +442,7 @@ div[class^='launch'].net:hover {
 }
 
 a, .fakeLink {
+    cursor: pointer;
     color: bisque;
     -o-transition:.5s;
     -ms-transition:.5s;
