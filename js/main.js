@@ -12,6 +12,12 @@ Date.prototype.dst = function() {
     return this.getTimezoneOffset() < this.stdTimezoneOffset();
 }
 
+// String endsWith
+
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
+
 
 // VARIABLES
 var OPTIONS_OPEN = false;
@@ -20,10 +26,13 @@ var UPDATE_IN_PROGRESS = false;
 var PAGE_UPDATE_IN = 0;
 var TIME_BETWEEN_UPDATES = 300;
 var MAX_RESULTS = 0;
-var RESULT_COUNT = 21/*12*/;
+var DEFAULT_RESULT_COUNT = 21;
+var RESULT_COUNT = DEFAULT_RESULT_COUNT;
 var LAUNCH_DATA = [];
 var FIRST_UPDATE = true;
+var ANIMATE_UPDATE = false;
 var USER_SETTINGS = localStorage;
+var HISTORY_MODE =  function() { var p = window.location.href; return p.endsWith("#history") || p.endsWith("history/"); }();
 
 var IS_INSIDE_LAUNCH = false;
 
@@ -47,6 +56,8 @@ var INSIDE_LAUNCH_MAX = 3600;
 var INSIDE_LAUNCH_MIN = -3600;
 var IS_INSIDE_LAUNCH = false;
 var IS_DEBUG = false;
+var SHOWMORE_DEFAULT_HTML = "<i class=\"fa fa-caret-down fa-fw\"></i>Show more launches<i class=\"fa fa-caret-down fa-fw\"></i>";
+var SHOW_MORE_VISIBLE = false;
 
 var SEARCH_GO_FUNCTION = function() { $(".loadIndicator").fadeIn(function() { updatePageInfo(); }); };
 var SEARCH_INTERVAL_ID = 0;
@@ -69,6 +80,8 @@ $(document).ready(
         $(".pageOptions, .optionsClose").click(function(){OPTIONS_OPEN = !OPTIONS_OPEN; $(".optionsPane").slideToggle();});
         $(".playPause").click(function(){toggleUpdating();});
         $(".searchClear").click(function(){$(".searchBox").val("");updatePageInfo();UPDATE_IN_PROGRESS=true;updateTimers();UPDATE_IN_PROGRESS=false;})
+        $(".historyButton").click(function(){switchMode();});
+        $(".showMore").click(function(){showMore();});
         /*$("[class^='launch-']").click(function() { 
             var me = "."+$(this).attr('class').split(" ")[0];
             console.log(me);
@@ -97,17 +110,60 @@ $(document).ready(
 
         });*/
         
-        if (window.location.href.indexOf("/beta/") > -1) { $("i.betaButton").hide(); }
+        if (window.location.href.indexOf("/beta/") > -1) { $("span.betaButton").hide(); }
         
-        getAPIData();
+        if (HISTORY_MODE) { HISTORY_MODE = false; switchMode(); }
+        else { getAPIData(); }
         setInterval(checkVersion, 1800000); /* 30 minutes */
     }
 );
 
+function switchMode() {
+    RESULT_COUNT = DEFAULT_RESULT_COUNT;
+    if (SHOW_MORE_VISIBLE) { SHOW_MORE_VISIBLE = false; $(".showMore").slideToggle(); }
+    HISTORY_MODE = !HISTORY_MODE;
+    $(".historyButton").css({minWidth: "155px"});
+    $(".pageTitle").fadeOut(
+        function() { 
+            $(".pageTitle").text($(".pageTitle").text().replace((HISTORY_MODE ? "Upcoming" : "Previous"), (HISTORY_MODE ? "Previous" : "Upcoming"))); 
+        }
+    );
+    $(".historyButtonText").fadeOut(
+        function() {
+            $(".historyButton").animate({maxWidth: (HISTORY_MODE ? "165" : "155")+"px"}, 
+                function() {
+                    $(".historyButtonText").html($(".historyButtonText").html().replace((HISTORY_MODE ? "Previous" : "Upcoming"), (HISTORY_MODE ? "Upcoming" : "Previous")));
+                    $(".historyButtonText").fadeIn();
+                }
+            );
+        }
+    );
+    ANIMATE_UPDATE = true;
+    $(".loadIndicator").fadeIn(function() { getAPIData(); });
+    $(".pageTitle").fadeIn();
+}
+
+function showMore() {
+    RESULT_COUNT += 4;
+    $(".showMore").html("<img src=\""+$('.loadIndicator').attr('src')+"\" />");
+    getAPIData();
+    $(".showMore").html(SHOWMORE_DEFAULT_HTML);
+    $("html, body").animate({scrollTop: $(".showMore").offset().top});
+    checkShowMoreAvailable();
+}
+
+function checkShowMoreAvailable() {
+    if (RESULT_COUNT >= MAX_RESULTS && SHOW_MORE_VISIBLE) { SHOW_MORE_VISIBLE = false; $(".showMore").slideToggle(); }
+}
+
+function getAPIURL() {
+    return (HISTORY_MODE ? "//ipeer.auron.co.uk/launchschedule/api/1/launches/?history=true&orderby=launchtime&order=DESC&limit="+RESULT_COUNT+"&cutoff="+Math.floor(new Date().getTime() / 1000) : "//ipeer.auron.co.uk/launchschedule/api/1/launches/?limit="+RESULT_COUNT);
+}
+
 function getAPIData() {
 
 	UPDATE_IN_PROGRESS = true;
-	var _json = $.getJSON("//ipeer.auron.co.uk/launchschedule/api/1/launches/?limit="+RESULT_COUNT)
+	var _json = $.getJSON(getAPIURL())
     .done(
         function (data) {
 
@@ -116,11 +172,9 @@ function getAPIData() {
 
             MAX_RESULTS = data['maxcount'];
 
-            // TODO: "Show More"
-
             LAUNCH_DATA = data['launches'];
 
-            if (FIRST_UPDATE) { $(".launches").fadeOut(function() { updatePageInfo(); }); }
+            if (FIRST_UPDATE || ANIMATE_UPDATE) { $(".launches").fadeOut(function() { updatePageInfo(); }); }
             else { updatePageInfo(); }
 
             UPDATE_IN_PROGRESS = false;
@@ -214,7 +268,7 @@ function updatePageInfo() {
         
             thisHTML += "<span class=\"links-"+id+"\">";
                 
-            if (launch['hasStream']) {
+            if (launch['hasStream'] && !HISTORY_MODE) {
                 var arr = launch['streamURLs'];
                 arr.forEach(function(l) {
                     
@@ -263,13 +317,17 @@ function updatePageInfo() {
     // Clear interval of search polling if one has been performed
     if (SEARCH_INTERVAL_ID != 0) { clearInterval(SEARCH_INTERVAL_ID); SEARCH_INTERVAL_ID = 0; }
     
-    if (FIRST_UPDATE) {
-        FIRST_UPDATE = false;
+    if (FIRST_UPDATE || ANIMATE_UPDATE) {
+        ANIMATE_UPDATE = false;
         $(".launches").fadeIn();
         updateTimers();
-        setInterval(updateTimers, 1000);
+        if (FIRST_UPDATE) {
+            setInterval(updateTimers, 1000);
+        }
+        FIRST_UPDATE = false;
     }
     $(".loadIndicator").fadeOut();
+    if (RESULT_COUNT < MAX_RESULTS && !SHOW_MORE_VISIBLE) { SHOW_MORE_VISIBLE = true; $(".showMore").slideToggle(); }
 
 }
 
@@ -341,7 +399,7 @@ function getCountdownDay(launch) {
                 month = MONTHS[date.getMonth()];
                 var _time = "&dash;"+pad(applyMilitary(date_closes.getHours()))+":"+pad(date_closes.getMinutes())+(date_closes.getSeconds() > 0 ? ":"+pad(date_closes.getSeconds()) : "");
                 var month = MONTHS[date_closes.getMonth()];
-                day += _time+" "+ord(date_closes.getDate());
+                day += _time+", "+month+" "+ord(date_closes.getDate());
                 
             }
             else {
@@ -353,14 +411,14 @@ function getCountdownDay(launch) {
         
         if (delayed || monthonly) { return month+(!monthonly?" "+day:""); }
         
-        return time+", "+month+" "+day+(date.dst()?LAUNCH_DAYLIGHTSAVINGS_HTML:"");
+        return time+", "+month+" "+day+(date.getYear() != date_now.getYear() && HISTORY_MODE ? " "+date.getFullYear() : "")+(date.dst()?LAUNCH_DAYLIGHTSAVINGS_HTML:"");
     
     }
     else {
         var time = pad(applyMilitary(date.getHours()))+":"+pad(date.getMinutes())+(date.getSeconds() > 0 ? ":"+pad(date.getSeconds()) : "");
         
         var dayDiff = date.getDate() - date_now.getDate();
-        var day = (dayDiff == 0 ? "Today" : (dayDiff == 1 ? "Tomorrow" : DAYS[date.getDay()]));
+        var day = (dayDiff == 0 ? "Today" : (dayDiff == 1 ? "Tomorrow" : (dayDiff == -1 ? "Yesterday" : DAYS[date.getDay()])));
         
         if (epoch < win_epoch) {
             
@@ -489,7 +547,7 @@ function updateTimers() {
 
 	if (!UPDATING_PAUSED && !UPDATE_IN_PROGRESS) {
 
-		PAGE_UPDATE_IN--;
+		if (!FIRST_UPDATE) { PAGE_UPDATE_IN--; }
 		var mins = Math.floor((PAGE_UPDATE_IN % 3600) / 60);
 		var secs = PAGE_UPDATE_IN % 60;
 		var updateTime = pad(mins)+":"+pad(secs);

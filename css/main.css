@@ -117,9 +117,9 @@ div.pageControls {
     text-align: right;
 }
 
-i.controlButton {
+.controlButton {
     min-width: 30px;
-    max-width: 50px;
+    max-width: 165px;
     height: 30px;
     float: left;
     text-align: center;
@@ -129,8 +129,25 @@ i.controlButton {
     text-shadow: 0 0 5px #000;
 }
 
-i.betaButton a {
+.historyButton {
+    min-width: 155px;
+    overflow: hidden;
+}
+
+.betaButton {
+    font-style: italic;
+}
+
+i.playPause {
+    line-height: 31px;
+    padding: 0;
+}
+
+.controlButton {
     padding: 0 5px 0px 5px;
+}
+
+.betaButton a {
     text-decoration: none;
 }
 
@@ -138,7 +155,7 @@ span.updateTimer {
     color: crimson;
     margin-right: 5px;
     font-size: 15px;
-    line-height: 30px;
+    line-height: 32px;
     text-shadow: 0 0 5px #000;
     width: 2.25em;
     max-width: 2.26em;
@@ -147,11 +164,12 @@ span.updateTimer {
     padding-right: 5px;
 }
 
-i.controlButton:hover {
+/*i.controlButton:hover {
     background: #414345; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to top, #414345 , #232526); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to top, #414345 , #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-}
+    /*background: -webkit-linear-gradient(to top, #414345 , #232526); /* Chrome 10-25, Safari 5.1-6 */
+    /*background: linear-gradient(to top, #414345 , #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+/*}*/
+
 
 div.searchHugger {
     float: left;
@@ -225,6 +243,19 @@ input.optionCheck, input.optionCheck + label {
 }
 
 /* Launches stuff */
+
+div.showMore {
+    text-align: center;
+    background-color: #434343;
+    background-image: url(../bg/lbg2.png);
+    max-width: 51.575em;
+    padding: 0.3125em;
+    width: 51.575em;
+    font-size: 1.25em;
+    color: bisque;
+    margin: 1em auto;
+    display: none;
+}
 
 .hoverable {
     cursor: help;
@@ -410,7 +441,8 @@ div[class^='launch'].net:hover {
     opacity: 1;
 }
 
-a {
+a, .fakeLink {
+    cursor: pointer;
     color: bisque;
     -o-transition:.5s;
     -ms-transition:.5s;
@@ -419,7 +451,7 @@ a {
     transition:.5s;
 }
 
-a:hover {
+a:hover, .fakeLink:hover {
     color: crimson;
 }
 

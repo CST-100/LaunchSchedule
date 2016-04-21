@@ -47,8 +47,9 @@
             </div>
             <!--<i class="controlButton sourcesAndCredits fa fa-info-circle"></i>
             <i class="controlButton pageOptions fa fa-cog fa-lg"></i>-->
-            <i class="controlButton betaButton" title="View the beta page"><a href="./beta/">BETA</a></i>
-            <i class="controlButton playPause fa fa-pause"></i>
+            <span class="controlButton historyButton fakeLink" title="View previous launches"><span class="historyButtonText"><i class="fa fa-clock-o fa-fw" ></i>Previous launches</span></span>
+            <span class="controlButton betaButton fakeLink" title="View the beta page"><a href="./beta/">BETA</a></span>
+            <i class="controlButton playPause fa fa-pause fakeLink"></i>
             <span class="updateTimer hoverable" title="Time until next page update">05:00</span>
         
             
@@ -89,10 +90,12 @@
         </div>
     
     </div>
+    
+    <div class="showMore fakeLink"><i class="fa fa-caret-down fa-fw"></i>Show more launches<i class="fa fa-caret-down fa-fw"></i></div>
 
     <div class="footer">
         
-        All times are displayed in your local time. <a href="//ipeer.auron.co.uk/launchschedule/api/1/launches/" target="_blank">API data</a> will be acquired every 5 minutes when outside and every 1 minute while inside a launch.<br />All launches will be displayed until they are 1 hour past their launch time.
+        All times are displayed in your local time. <a href="//ipeer.auron.co.uk/launchschedule/api/1/launches/" target="_blank">API data</a> will be acquired every 5 minutes when outside and every 1 minute while inside a launch.<br />Missing or outdated info? Let me know on <a class="twitter" href="https://twitter.com/iPeer" target="_blank"><i class="fa fa-twitter fa-fw"></i>Twitter</a>. All launches will be displayed until they are 1 hour past their launch time.
         
         <span class="versionString">Deployed from <?php echo "<a class=\"github\" href=\"https://github.com/iPeer/LaunchSchedule/commit/".$lhash."\" target=\"_blank\"><i class=\"fa fa-github-square fa-fw\"></i>".$shash."</a>."; ?></span>
         
