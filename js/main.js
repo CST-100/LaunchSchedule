@@ -33,6 +33,7 @@ var FIRST_UPDATE = true;
 var ANIMATE_UPDATE = false;
 var USER_SETTINGS = localStorage;
 var HISTORY_MODE =  function() { var p = window.location.href; return p.endsWith("#history") || p.endsWith("history/"); }();
+var SINGLE_MODE = function() { var p = window.location.href; return p.indexOf("/launch/") > -1; }();
 
 var IS_INSIDE_LAUNCH = false;
 
@@ -111,6 +112,10 @@ $(document).ready(
         });*/
         
         if (window.location.href.indexOf("/beta/") > -1) { $("span.betaButton").hide(); }
+        if (SINGLE_MODE) {
+            $(".topBar").hide();
+            $(".footer").hide();
+        }
         
         if (HISTORY_MODE) { HISTORY_MODE = false; switchMode(); }
         else { getAPIData(); }
@@ -157,7 +162,24 @@ function checkShowMoreAvailable() {
 }
 
 function getAPIURL() {
-    return (HISTORY_MODE ? "//ipeer.auron.co.uk/launchschedule/api/1/launches/?history=true&orderby=launchtime&order=DESC&limit="+RESULT_COUNT+"&cutoff="+Math.floor(new Date().getTime() / 1000) : "//ipeer.auron.co.uk/launchschedule/api/1/launches/?limit="+RESULT_COUNT);
+    if (HISTORY_MODE) { 
+        return "//ipeer.auron.co.uk/launchschedule/api/1/launches/?history=true&orderby=launchtime&order=DESC&limit="+RESULT_COUNT+"&cutoff="+Math.floor(new Date().getTime() / 1000);
+    }
+    else if (SINGLE_MODE) {
+        // Get the requested ID
+        var p = window.location.href;
+        var id = p.split("/launch/")[1].replace("/", "");
+        if (id == undefined || id == "next") {
+            return "//ipeer.auron.co.uk/launchschedule/api/1/launches/?limit=1";
+        }
+        else {
+            var num = parseInt(id);
+            return "//ipeer.auron.co.uk/launchschedule/api/1/launches/?launchid="+num;
+        }
+    }
+    else { 
+        return "//ipeer.auron.co.uk/launchschedule/api/1/launches/?limit="+RESULT_COUNT;
+    }
 }
 
 function getAPIData() {
@@ -223,7 +245,7 @@ function updatePageInfo() {
     
         //console.log("------> "+col);
         
-        thisHTML += "<div class=\"launch"+(featured?" featured":" small")+(delayed?" net":"")+"\">"; // Open launch div
+        thisHTML += "<div class=\"launch"+(featured?" featured":" small")+(delayed?" net":"")+(SINGLE_MODE ?  " single" : "")+"\">"; // Open launch div
             
         thisHTML += "<div class=\"top\">"; // Open top div
             
@@ -312,6 +334,10 @@ function updatePageInfo() {
     if (displayResults == 0) { fullHTML = "The search came up empty: "+$(".searchBox").val(); }
     else { fullHTML += "</tr></table>"; }
     
+    if (SINGLE_MODE) {
+        $(".launches").addClass("single");
+    }
+    
     $(".launches").html(fullHTML);
     
     // Clear interval of search polling if one has been performed
@@ -327,7 +353,7 @@ function updatePageInfo() {
         FIRST_UPDATE = false;
     }
     $(".loadIndicator").fadeOut();
-    if (RESULT_COUNT < MAX_RESULTS && !SHOW_MORE_VISIBLE) { SHOW_MORE_VISIBLE = true; $(".showMore").slideToggle(); }
+    if (RESULT_COUNT < MAX_RESULTS && !SHOW_MORE_VISIBLE && !SINGLE_MODE) { SHOW_MORE_VISIBLE = true; $(".showMore").slideToggle(); }
 
 }
 

@@ -293,7 +293,12 @@ div.launch span.tag[data-title="Manned flight"] {
     background: linear-gradient(to right, #eebb99, #8B4513); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera */
 }
 
-div.launches {
+div.launches.single {
+    margin: 0 0;
+    padding: 0;
+}
+
+div.launches:not(.single) {
     flex: 0;
     justify-content: center;
     margin: 0 auto;
@@ -333,13 +338,17 @@ div.launch {
     margin-top: 1.25em;
 }
 
-div.launch.featured 
+div.launch.featured
 {
     font-size: 2em;
     width: 32em;
     min-width: 10em;
     max-width: 32em;
     margin: 1em auto 0 auto;
+}
+
+div.launch.featured.single {
+    margin: 0 auto 0 auto;
 }
 
 div.launch span[class^='rocket'] {
