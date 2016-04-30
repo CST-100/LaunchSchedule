@@ -115,6 +115,7 @@ $(document).ready(
         if (SINGLE_MODE) {
             $(".topBar").hide();
             $(".footer").hide();
+            $("body, html").css({minWidth: "0px"});
         }
         
         if (HISTORY_MODE) { HISTORY_MODE = false; switchMode(); }
