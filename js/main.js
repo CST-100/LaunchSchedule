@@ -120,7 +120,9 @@ $(document).ready(
         
         if (HISTORY_MODE) { HISTORY_MODE = false; switchMode(); }
         else { getAPIData(); }
-        setInterval(checkVersion, 1800000); /* 30 minutes */
+        if (!SINGLE_MODE) {
+            setInterval(checkVersion, 1800000); /* 30 minutes */
+        }
     }
 );
 
