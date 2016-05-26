@@ -508,7 +508,7 @@ function updateTimers() {
                 var wSecs = Math.floor((w - new Date().getTime()) / 1000);
                 var wCloseTime = getCountdownString(wSecs);
                 if (wSecs <= 0) { wCloseTime = "CLOSED"; }
-                holding_string += " (<span class=\"launch-WindowTimer\" title=\"Window closes in\">"+wCloseTime+"</span>)";
+                holding_string += " (<span class=\"launch-WindowTimer\" title=\"Window closes in\">Window closes in: "+wCloseTime+"</span>)";
             }
 			$(".countdown-"+id).html(holding_string);
             active_launches++;
@@ -566,7 +566,7 @@ function updateTimers() {
     
     var in_launch = active_launches > 0;
 
-	if (in_launch && !IS_INSIDE_LAUNCH) {
+	if (in_launch && !IS_INSIDE_LAUNCH && !SINGLE_MODE) {
         
 		IS_INSIDE_LAUNCH = true;
 		TIME_BETWEEN_UPDATES = 60;
@@ -575,7 +575,7 @@ function updateTimers() {
 
 	}
 
-	else if (!in_launch && IS_INSIDE_LAUNCH) {
+	else if (!in_launch && IS_INSIDE_LAUNCH && !SINGLE_MODE) {
 
 		IS_INSIDE_LAUNCH = false;
 		TIME_BETWEEN_UPDATES = 300;
