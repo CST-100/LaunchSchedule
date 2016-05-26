@@ -502,7 +502,16 @@ function updateTimers() {
 		if (launch['holding']) { // launch is holding
 
 			in_launch = true;
-			$(".countdown-"+id).html(LAUNCH_COUNTDOWN_HOLDING_STRING);
+            var holding_string = LAUNCH_COUNTDOWN_HOLDING_STRING;
+            if (launch['launchtime_epoch'] != launch['windowcloses_epoch'] && launch['windowcloses_epoch'] != undefined) {
+                var w = launch['windowcloses_epoch'] * 1000;
+                var wSecs = Math.floor((w - new Date().getTime()) / 1000);
+                var wCloseTime = getCountdownString(wSecs);
+                if (wSecs <= 0) { wCloseTime = "CLOSED"; }
+                holding_string += " (<span class=\"launch-WindowTimer\" title=\"Window closes in\">"+wCloseTime+"</span>)";
+            }
+			$(".countdown-"+id).html(holding_string);
+            active_launches++;
 			continue;
 
 		}
