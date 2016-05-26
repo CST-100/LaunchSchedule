@@ -248,7 +248,7 @@ function updatePageInfo() {
     
         //console.log("------> "+col);
         
-        thisHTML += "<div class=\"launch"+(featured?" featured":" small")+(delayed?" net":"")+(SINGLE_MODE ?  " single" : "")+"\">"; // Open launch div
+        thisHTML += "<div class=\"launch"+(featured?" featured":" small")+(delayed && !SINGLE_MODE?" net":"")+(SINGLE_MODE ?  " single" : "")+"\">"; // Open launch div
             
         thisHTML += "<div class=\"top\">"; // Open top div
             
