@@ -422,7 +422,7 @@ function getCountdownDay(launch) {
         var time = pad(applyMilitary(date.getHours()))+":"+pad(date.getMinutes())+(date.getSeconds() > 0 ? ":"+pad(date.getSeconds()) : "");
         var month = MONTHS_LONG[date.getMonth()];
         var day = ord(date.getDate());
-        if (epoch < win_epoch) {
+        if (epoch < win_epoch && !delayed) {
             
             if (date_closes.getDay() > date.getDay()) {
                 month = MONTHS[date.getMonth()];
