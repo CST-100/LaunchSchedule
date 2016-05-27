@@ -451,13 +451,13 @@ function getCountdownDay(launch) {
         
         if (epoch < win_epoch) {
             
-            if (date_closes.getDay() > date.getDay()) {
+            if (date_closes.getDay() > date_now.getDay()) {
                 
-                var _dayDiff = date_closes.getDate() - date_now.getDate();
+                /*var _dayDiff = date_closes.getDate() - date_now.getDate();
                 var _day = (_dayDiff == 0 ? "Today" : (_dayDiff == 1 ? "Tomorrow" : DAYS[date_closes.getDay()]));
                 var _time = "&dash;"+pad(applyMilitary(date_closes.getHours()))+":"+pad(date_closes.getMinutes())+(date_closes.getSeconds() > 0 ? ":"+pad(date_closes.getSeconds()) : "");
                 
-                day += _time+" "+day;
+                day += _time+" "+_day;*/
                 
             }
             else {
@@ -556,7 +556,8 @@ function updateTimers() {
 		
 		//console.log("---> "+tString);
         if (secs >= 3600) {
-            tString += " / "+getCountdownDay(launch);
+            //tString = getCountdownDay(launch)+" / "+tString;
+            tString = getCountdownDay(launch)+" &dash; "+tString;
         }
 
 		$(".countdown-"+id).html(tString);

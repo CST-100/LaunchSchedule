@@ -162,6 +162,7 @@ span.updateTimer {
     text-align: left;
     display: inline-block;
     padding-right: 5px;
+    cursor: help;
 }
 
 /*i.controlButton:hover {
@@ -259,6 +260,7 @@ div.showMore {
 
 .hoverable {
     cursor: help;
+    border-bottom: 1px dotted;
 }
 
 div.launch span.tag:first-child {
