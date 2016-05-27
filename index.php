@@ -50,7 +50,7 @@
             <span class="controlButton historyButton fakeLink"><span class="historyButtonText"><i class="fa fa-clock-o fa-fw" ></i>Previous launches</span></span>
             <span class="controlButton betaButton fakeLink" title="View the beta page"><a href="./beta/">BETA</a></span>
             <i class="controlButton playPause fa fa-pause fakeLink"></i>
-            <span class="updateTimer hoverable" title="Time until next page update">05:00</span>
+            <span class="updateTimer" title="Time until next page update">05:00</span>
         
             
         </div>
