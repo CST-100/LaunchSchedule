@@ -442,7 +442,7 @@ div[class^='launch'].net {
     -webkit-backface-visibility: hidden; /* Fix font shifting slight after opacity animation reaches 1.0 */
 }
 
-div.launch span.launch-NET, div.launch span.launch-DST, div.launch span.launch-WindowTimer {
+div.launch span.launch-NET, div.launch span.launch-DST/*, div.launch span.launch-WindowTimer*/ {
     border-bottom: 1px dotted;
     border-color: inherit;
     cursor: help;
