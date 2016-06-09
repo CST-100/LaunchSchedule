@@ -50,6 +50,7 @@ var LAUNCH_COUNTDOWN_TBD_STRING = "";
 var LAUNCH_COUNTDOWN_POST_LAUNCH_STRING = "L+{TIME}";
 var LAUNCH_COUNTDOWN_PRE_LAUNCH_STRING = "L-{TIME}";
 var LAUNCH_COUNTDOWN_PRE_LAUNCH_THRESHOLD = 3600;
+var LAUNCH_WINDOW_CLOSES_HTML = "<span class=\"hoverable\" title=\"Window Closes In\">WCI</span>: ";
 var LAUNCH_NOEARLIERTHAN_HTML = "<span class=\"launch-NET\" title=\"No Earlier Than\">NET</span> ";
 var LAUNCH_DAYLIGHTSAVINGS_HTML = " (<span class=\"launch-DST\" title=\"Daylight Savings Time\">DST</span>)";
 var DEFAULT_COUNTDOWN_STRING = "";
@@ -508,7 +509,7 @@ function updateTimers() {
                 var wSecs = Math.floor((w - new Date().getTime()) / 1000);
                 var wCloseTime = getCountdownString(wSecs);
                 if (wSecs <= 0) { wCloseTime = "CLOSED"; }
-                holding_string += " (<span class=\"launch-WindowTimer\" title=\"Window closes in\">Window closes in: "+wCloseTime+"</span>)";
+                holding_string += " ("+LAUNCH_WINDOW_CLOSES_HTML+"<span class=\"launch-WindowTimer\"> "+wCloseTime+"</span>)";
             }
 			$(".countdown-"+id).html(holding_string);
             active_launches++;
@@ -547,7 +548,7 @@ function updateTimers() {
             var wSecs = Math.floor((w - d.getTime()) / 1000);
             var wCloseTime = getCountdownString(wSecs);
             if (wSecs <= 0) { wCloseTime = "CLOSED"; }
-            time += " (<span class=\"launch-WindowTimer\" title=\"Window closes in\">"+wCloseTime+"</span>)";
+            time += " ("+LAUNCH_WINDOW_CLOSES_HTML+"<span class=\"launch-WindowTimer\">"+wCloseTime+"</span>)";
             
         }
 		if (l) { tString += LAUNCH_COUNTDOWN_POST_LAUNCH_STRING.replace("{TIME}", time); }
