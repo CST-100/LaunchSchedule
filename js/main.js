@@ -283,7 +283,7 @@ function updatePageInfo() {
             
         thisHTML += "<span class=\"countdown-"+id+"\">";
         if (FIRST_UPDATE) { thisHTML += "Calculating..."; }
-        else { thisHTML += ($(".countdown-"+id).text() == "" ? "Calculating..." : $(".countdown-"+id).html()); }
+        else { thisHTML += ($(".countdown-"+id).text() == "" ? "Calculating..." : checkCountdownLength(id, $(".countdown-"+id).html())); }
         thisHTML += "</span>";
             
         thisHTML += "</div>"; // Close left side bottom
@@ -537,7 +537,7 @@ function updateTimers() {
         
         if (secs > 86400) { 
             var tString = getCountdownDay(launch);
-            $(".countdown-"+id).html(tString);
+            $(".countdown-"+id).html(checkCountdownLength(id, tString));
             continue;
         }
 
@@ -561,7 +561,7 @@ function updateTimers() {
             tString = getCountdownDay(launch)+" &dash; "+tString;
         }
 
-		$(".countdown-"+id).html(tString);
+		$(".countdown-"+id).html(checkCountdownLength(id, tString));
 
 
 	}
@@ -598,6 +598,14 @@ function updateTimers() {
 	}
 
 
+}
+
+function checkCountdownLength(id, data) {
+    var length = (data.indexOf(LAUNCH_DAYLIGHTSAVINGS_HTML) > -1 ? data.length - LAUNCH_DAYLIGHTSAVINGS_HTML.length : data.length);
+    if (id > 1 && length >= 35 && $(".countdown-"+id).hasClass("smallText") == false) {
+        $(".countdown-"+id).addClass("smallText");
+    }
+    return data;
 }
 
 function getCountdownString(secs) {
