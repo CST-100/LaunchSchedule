@@ -406,6 +406,11 @@ div.launch span[class^='countdown'] {
     display: block;
 }
 
+div.launch span[class^='countdown'].smallText {
+    font-size: 0.85em;
+    min-height: 1em;
+}
+
 div.footer {
     margin-top: 1em;
     display: block;

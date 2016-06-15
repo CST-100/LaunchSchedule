@@ -283,7 +283,7 @@ function updatePageInfo() {
             
         thisHTML += "<span class=\"countdown-"+id+"\">";
         if (FIRST_UPDATE) { thisHTML += "Calculating..."; }
-        else { thisHTML += ($(".countdown-"+id).text() == "" ? "Calculating..." : $(".countdown-"+id).html()); }
+        else { thisHTML += ($(".countdown-"+id).text() == "" ? "Calculating..." : checkCountdownLength(id, $(".countdown-"+id).html())); }
         thisHTML += "</span>";
             
         thisHTML += "</div>"; // Close left side bottom
@@ -294,12 +294,14 @@ function updatePageInfo() {
         
             thisHTML += "<span class=\"links-"+id+"\">";
                 
-            if (launch['hasStream'] && !HISTORY_MODE) {
+            if (launch['hasStream']) {
                 var arr = launch['streamURLs'];
                 arr.forEach(function(l) {
                     
                     var buttonClass = "fa-tv";
-                    if (l.indexOf("youtube.com") > -1 || l.indexOf("youtu.be") > -1) { buttonClass = "fa-youtube-play"; }
+                    var isYoutube = l.indexOf("youtube.com") > -1 || l.indexOf("youtu.be") > -1;
+                    if (!isYoutube && HISTORY_MODE) { continue; }
+                    if (isYouTube) { buttonClass = "fa-youtube-play"; }
                     
                     thisHTML += "<a href=\""+l+"\" target=\"_blank\" title=\"Watch launch coverage\"><i class=\"launchIcon launchStream fa "+buttonClass+" fa-fw\"></i></a>";
                 
@@ -537,7 +539,7 @@ function updateTimers() {
         
         if (secs > 86400) { 
             var tString = getCountdownDay(launch);
-            $(".countdown-"+id).html(tString);
+            $(".countdown-"+id).html(checkCountdownLength(id, tString));
             continue;
         }
 
@@ -561,7 +563,7 @@ function updateTimers() {
             tString = getCountdownDay(launch)+" &dash; "+tString;
         }
 
-		$(".countdown-"+id).html(tString);
+		$(".countdown-"+id).html(checkCountdownLength(id, tString));
 
 
 	}
@@ -598,6 +600,14 @@ function updateTimers() {
 	}
 
 
+}
+
+function checkCountdownLength(id, data) {
+    var length = (data.indexOf(LAUNCH_DAYLIGHTSAVINGS_HTML) > -1 ? data.length - LAUNCH_DAYLIGHTSAVINGS_HTML.length : data.length);
+    if (id > 1 && length >= 35 && $(".countdown-"+id).hasClass("smallText") == false) {
+        $(".countdown-"+id).addClass("smallText");
+    }
+    return data;
 }
 
 function getCountdownString(secs) {
