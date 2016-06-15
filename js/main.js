@@ -294,12 +294,14 @@ function updatePageInfo() {
         
             thisHTML += "<span class=\"links-"+id+"\">";
                 
-            if (launch['hasStream'] && !HISTORY_MODE) {
+            if (launch['hasStream']) {
                 var arr = launch['streamURLs'];
                 arr.forEach(function(l) {
                     
                     var buttonClass = "fa-tv";
-                    if (l.indexOf("youtube.com") > -1 || l.indexOf("youtu.be") > -1) { buttonClass = "fa-youtube-play"; }
+                    var isYoutube = l.indexOf("youtube.com") > -1 || l.indexOf("youtu.be") > -1;
+                    if (!isYoutube && HISTORY_MODE) { continue; }
+                    if (isYouTube) { buttonClass = "fa-youtube-play"; }
                     
                     thisHTML += "<a href=\""+l+"\" target=\"_blank\" title=\"Watch launch coverage\"><i class=\"launchIcon launchStream fa "+buttonClass+" fa-fw\"></i></a>";
                 
