@@ -251,12 +251,30 @@ function updatePageInfo() {
         
         thisHTML += "<div class=\"launch"+(featured?" featured":" small")+(delayed && !SINGLE_MODE?" net":"")+(SINGLE_MODE ?  " single" : "")+"\">"; // Open launch div
             
+        
         thisHTML += "<div class=\"top\">"; // Open top div
             
         thisHTML += "<span class=\"rocket-"+id+"\">"; // open rocket
         thisHTML += launch['vehicle'];
+             
+        /*thisHTML += "<span class=\"location-"+id+"\">"; // open location
+        thisHTML += "&nbsp;from: "+launch['location'];
+        thisHTML += "</span>"; // close location*/
+        // ^^ Doesn't look right, will maybe revisit
         
+        
+        thisHTML += "</span>"; // close rocket
+        
+            
+        thisHTML += "<span class=\"payload-"+id+"\">";
+        thisHTML += launch['payload'];
+        thisHTML += "</span>";
+            
+        thisHTML += "</div>"; // Close top div
+
         if (launch['hasTags']) {
+            
+            thisHTML += "<div class=\"tags\">"; // Open tags div
             
             var t = launch['tags'];
             t.forEach(function(e) { 
@@ -267,15 +285,9 @@ function updatePageInfo() {
                 
             });
             
+            thisHTML += "</div>"; // Close tags div
+            
         }
-        
-        thisHTML += "</span>"; // close rocket
-            
-        thisHTML += "<span class=\"payload-"+id+"\">";
-        thisHTML += launch['payload'];
-        thisHTML += "</span>";
-            
-        thisHTML += "</div>"; // Close top div
             
         thisHTML += "<div class=\"bottom\">"; // Open bottom div
             
@@ -298,10 +310,10 @@ function updatePageInfo() {
                 var arr = launch['streamURLs'];
                 arr.forEach(function(l) {
                     
-                    var buttonClass = "fa-tv";
                     var isYoutube = (l.indexOf("youtube.com") > -1 || l.indexOf("youtu.be") > -1);
                     if (!isYoutube && HISTORY_MODE) { return; }
-                    if (isYoutube) { buttonClass = "fa-youtube-play"; }
+                    var buttonClass = (isYoutube ? "fa-youtube-play" : "fa-tv");
+                    //if (isYoutube) { buttonClass = "fa-youtube-play"; }
                     
                     thisHTML += "<a href=\""+l+"\" target=\"_blank\" title=\"Watch launch coverage\"><i class=\"launchIcon launchStream fa "+buttonClass+" fa-fw\"></i></a>";
                 
