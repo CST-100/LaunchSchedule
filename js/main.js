@@ -251,12 +251,32 @@ function updatePageInfo() {
         
         thisHTML += "<div class=\"launch"+(featured?" featured":" small")+(delayed && !SINGLE_MODE?" net":"")+(SINGLE_MODE ?  " single" : "")+"\">"; // Open launch div
             
+        
         thisHTML += "<div class=\"top\">"; // Open top div
             
         thisHTML += "<span class=\"rocket-"+id+"\">"; // open rocket
         thisHTML += launch['vehicle'];
+             
+        /*thisHTML += "<span class=\"location-"+id+"\">"; // open location
+        thisHTML += "&nbsp;from: "+launch['location'];
+        thisHTML += "</span>"; // close location*/
+        // ^^ Doesn't look right, will maybe revisit
         
+        
+        thisHTML += "</span>"; // close rocket
+        
+            
+        thisHTML += "<span class=\"payload-"+id+"\">";
+        thisHTML += launch['payload'];
+        thisHTML += "</span>";
+            
+        thisHTML += "</div>"; // Close top div
+        
+        var placeTagsDiv = (!featured || (featured && launch['hasTags']));
+        if (placeTagsDiv) thisHTML += "<div class=\"tags\">"; // Open tags div
+
         if (launch['hasTags']) {
+            
             
             var t = launch['tags'];
             t.forEach(function(e) { 
@@ -267,15 +287,10 @@ function updatePageInfo() {
                 
             });
             
+            
         }
         
-        thisHTML += "</span>"; // close rocket
-            
-        thisHTML += "<span class=\"payload-"+id+"\">";
-        thisHTML += launch['payload'];
-        thisHTML += "</span>";
-            
-        thisHTML += "</div>"; // Close top div
+        if (placeTagsDiv) thisHTML += "</div>"; // Close tags div
             
         thisHTML += "<div class=\"bottom\">"; // Open bottom div
             
@@ -298,10 +313,10 @@ function updatePageInfo() {
                 var arr = launch['streamURLs'];
                 arr.forEach(function(l) {
                     
-                    var buttonClass = "fa-tv";
                     var isYoutube = (l.indexOf("youtube.com") > -1 || l.indexOf("youtu.be") > -1);
                     if (!isYoutube && HISTORY_MODE) { return; }
-                    if (isYoutube) { buttonClass = "fa-youtube-play"; }
+                    var buttonClass = (isYoutube ? "fa-youtube-play" : "fa-tv");
+                    //if (isYoutube) { buttonClass = "fa-youtube-play"; }
                     
                     thisHTML += "<a href=\""+l+"\" target=\"_blank\" title=\"Watch launch coverage\"><i class=\"launchIcon launchStream fa "+buttonClass+" fa-fw\"></i></a>";
                 
@@ -425,7 +440,7 @@ function getCountdownDay(launch) {
         var time = pad(applyMilitary(date.getHours()))+":"+pad(date.getMinutes())+(date.getSeconds() > 0 ? ":"+pad(date.getSeconds()) : "");
         var month = MONTHS_LONG[date.getMonth()];
         var day = ord(date.getDate());
-        if (epoch < win_epoch && !delayed) {
+        if (epoch < win_epoch && !delayed && !HISTORY_MODE) {
             
             if (date_closes.getDay() > date.getDay()) {
                 month = MONTHS[date.getMonth()];

@@ -12,6 +12,7 @@ body, html {
 	font-family: 'Futura', sans-serif;
 	cursor: default;
     background-image: url(../bg/bg.jpg);
+    font-size: 16px;
 }
 
 .gradientBlue {
@@ -263,20 +264,36 @@ div.showMore {
     border-bottom: 1px dotted;
 }
 
-div.launch span.tag:first-child {
+/*div.launch span.tag:first-child {
     margin-left: 0.5em;
+}*/
+
+div.launch div.tags {
+    padding-top: 0.1em;
+    vertical-align: middle;    
+    line-height: 0.5em;
+    margin-bottom: 0.2em;
+    min-height: 0.5em;
 }
+
+div.launch span.tag:not(:first-child) {
+    margin-left: 0.1em;
+}
+
+/*div.launch.featured span.tag {
+    font-size: 0.35em;
+}*/
 
 div.launch span.tag {
     font-size: 0.5em;
     vertical-align: top;
-    padding: 0.3em;
-    border-radius: 5px;
+    padding: 0.2em;
+    /*border-radius: 5px;*/
     background-color: bisque;
     color: #000;
-    margin-left: 0.1em;
     border: 1px solid #000;
-    line-height: 0.7em;
+    /*line-height: 0.7em;*/
+    height: 0.1em;
     max-height: 0.7em;
 }
 
@@ -353,6 +370,19 @@ div.launch.featured.single {
     margin: 0 auto 0 auto;
 }
 
+div.launch span[class^='location'] {
+    
+    color: crimson;
+    flex: 1;
+    -webkit-flex: 1;
+    text-overflow: ellipsis;
+    display: flex;
+    display: -webkit-flex;
+    font-size: 0.5em;
+    line-height: 0.5em;
+    
+}
+
 div.launch span[class^='rocket'] {
     
     color: crimson;
@@ -389,7 +419,6 @@ div.right {
     text-align: right;
     flex: 1;
     -webkit-flex: 1;
-    min-width: 10em;
     
 }
 div.left {
