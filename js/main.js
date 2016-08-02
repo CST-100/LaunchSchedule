@@ -271,10 +271,12 @@ function updatePageInfo() {
         thisHTML += "</span>";
             
         thisHTML += "</div>"; // Close top div
+        
+        var placeTagsDiv = (!featured || (featured && launch['hasTags']));
+        if (placeTagsDiv) thisHTML += "<div class=\"tags\">"; // Open tags div
 
         if (launch['hasTags']) {
             
-            thisHTML += "<div class=\"tags\">"; // Open tags div
             
             var t = launch['tags'];
             t.forEach(function(e) { 
@@ -285,9 +287,10 @@ function updatePageInfo() {
                 
             });
             
-            thisHTML += "</div>"; // Close tags div
             
         }
+        
+        if (placeTagsDiv) thisHTML += "</div>"; // Close tags div
             
         thisHTML += "<div class=\"bottom\">"; // Open bottom div
             
@@ -437,7 +440,7 @@ function getCountdownDay(launch) {
         var time = pad(applyMilitary(date.getHours()))+":"+pad(date.getMinutes())+(date.getSeconds() > 0 ? ":"+pad(date.getSeconds()) : "");
         var month = MONTHS_LONG[date.getMonth()];
         var day = ord(date.getDate());
-        if (epoch < win_epoch && !delayed) {
+        if (epoch < win_epoch && !delayed && !HISTORY_MODE) {
             
             if (date_closes.getDay() > date.getDay()) {
                 month = MONTHS[date.getMonth()];

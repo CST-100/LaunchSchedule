@@ -12,6 +12,7 @@ body, html {
 	font-family: 'Futura', sans-serif;
 	cursor: default;
     background-image: url(../bg/bg.jpg);
+    font-size: 16px;
 }
 
 .gradientBlue {
@@ -271,6 +272,8 @@ div.launch div.tags {
     padding-top: 0.1em;
     vertical-align: middle;    
     line-height: 0.5em;
+    margin-bottom: 0.2em;
+    min-height: 0.5em;
 }
 
 div.launch span.tag:not(:first-child) {
@@ -416,7 +419,6 @@ div.right {
     text-align: right;
     flex: 1;
     -webkit-flex: 1;
-    min-width: 10em;
     
 }
 div.left {
