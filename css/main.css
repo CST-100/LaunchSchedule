@@ -272,8 +272,11 @@ div.launch div.tags {
     padding-top: 0.1em;
     vertical-align: middle;    
     line-height: 0.5em;
-    margin-bottom: 0.2em;
     min-height: 0.5em;
+}
+
+div.launch:not(.featured) div.tags {
+    margin-bottom: 0.2em;
 }
 
 div.launch span.tag:not(:first-child) {
