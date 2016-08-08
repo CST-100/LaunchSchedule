@@ -17,7 +17,7 @@
 <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
 <link href='//fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 <title>Upcoming Rocket Launch countdowns</title>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script src="js/main.js?v=<?php echo $shash ?>"></script>
 </head>
 <body>
