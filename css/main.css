@@ -268,14 +268,13 @@ div.showMore {
     margin-left: 0.5em;
 }*/
 
-div.launch div.tags {
+div.launch div.tags:not(:empty) {
     padding-top: 0.1em;
     vertical-align: middle;    
     line-height: 0.5em;
-    min-height: 0.5em;
 }
 
-div.launch:not(.featured) div.tags {
+div.launch:not(.featured) div.tags:not(:empty) {
     margin-bottom: 0.2em;
 }
 
@@ -406,13 +405,29 @@ div.launch span[class^='payload'] {
     
 }
 
+div.launch span[class^='windowinfo-']:before {
+    content: "Window: ";
+}
+
+div.launch span[class^='windowinfo-'] {
+    
+    display: block;
+    font-size: 0.6em;
+    max-height: 1.166666666667em;
+    
+}
+
+div.launch.featured span[class^='windowinfo-'] {
+    margin-top: -0.3em;
+}
+
 div.bottom, div.top {
     display: flex;
     display: -webkit-flex;
     align-items: center;
     word-wrap: normal;
     white-space: nowrap;
-    max-height: 1.4375em;
+    max-height: 1.796875em;
     text-overflow: ellipsis;
 }
 
@@ -434,8 +449,15 @@ div.left {
     
 }
 
+div.launchContainer {
+    
+}
+
 div.launch span[class^='countdown'] {
     display: block;
+    max-height: 1.2em;
+    flex: 1;
+    -webkit-flex: 1;
 }
 
 div.launch span[class^='countdown'].smallText {

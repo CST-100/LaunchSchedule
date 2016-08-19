@@ -68,6 +68,8 @@ var SETTINGS = ["use12HourTimes", "backgrounds"]; // So we can programatically c
 var SETTINGS_DESC = {"use12hourtimes": "Use 12 hour time notation?", "backgrounds": "Disable randomised background colours*"};
 var SETTINGS_PER_LINE = 2;
 
+var popupNextID = 0;
+
 // Set up the page and all the jQuery magic we need
 
 $(document).ready(
@@ -167,22 +169,22 @@ function checkShowMoreAvailable() {
 
 function getAPIURL() {
     if (HISTORY_MODE) { 
-        return "//ipeer.auron.co.uk/launchschedule/api/1/launches/?history=true&orderby=launchtime&order=DESC&limit="+RESULT_COUNT+"&cutoff="+Math.floor(new Date().getTime() / 1000);
+        return "//ipeer.auron.co.uk/launchschedule/api/1/launches/?history=true&orderby=launchtime&order=DESC&limit="+RESULT_COUNT+"&cutoff="+Math.floor(new Date().getTime() / 1000)+"&omitapidata=1";
     }
     else if (SINGLE_MODE) {
         // Get the requested ID
         var p = window.location.href;
         var id = p.split("/launch/")[1].replace("/", "");
         if (id == undefined || id == "next") {
-            return "//ipeer.auron.co.uk/launchschedule/api/1/launches/?limit=1";
+            return "//ipeer.auron.co.uk/launchschedule/api/1/launches/?limit=1&omitapidata=1";
         }
         else {
             var num = parseInt(id);
-            return "//ipeer.auron.co.uk/launchschedule/api/1/launches/?launchid="+num;
+            return "//ipeer.auron.co.uk/launchschedule/api/1/launches/?launchid="+num+"&omitapidata=1";
         }
     }
     else { 
-        return "//ipeer.auron.co.uk/launchschedule/api/1/launches/?limit="+RESULT_COUNT;
+        return "//ipeer.auron.co.uk/launchschedule/api/1/launches/?limit="+RESULT_COUNT+"&omitapidata=1";
     }
 }
 
@@ -248,6 +250,7 @@ function updatePageInfo() {
         }
     
         //console.log("------> "+col);
+        thisHTML += "<div class=\"launchContainer\">"; // Open launch contriner
         
         thisHTML += "<div class=\"launch"+(featured?" featured":" small")+(delayed && !SINGLE_MODE?" net":"")+(SINGLE_MODE ?  " single" : "")+"\">"; // Open launch div
             
@@ -300,6 +303,13 @@ function updatePageInfo() {
         if (FIRST_UPDATE) { thisHTML += "Calculating..."; }
         else { thisHTML += ($(".countdown-"+id).text() == "" ? "Calculating..." : checkCountdownLength(id, $(".countdown-"+id).html())); }
         thisHTML += "</span>";
+        if (!launch['delayed'] && !launch['monthonlyeta']) {
+            thisHTML += "<span class=\"windowinfo-"+id+"\">" // Open window info span
+        
+            thisHTML += getWindowString(launch);
+        
+            thisHTML += "</span>"; // close window info span
+        }
             
         thisHTML += "</div>"; // Close left side bottom
             
@@ -342,13 +352,16 @@ function updatePageInfo() {
             thisHTML += "</div>"; // Close bottom right side
                 
         }
-            
+                    
         thisHTML += "</div>"; // Close bottom div
             
         thisHTML += "</div>"; // Close launch div
         
+        thisHTML += "</div>"; // Close launch container
         
         fullHTML += thisHTML;
+        
+        console.log(fullHTML);
         
     }
     
@@ -420,69 +433,37 @@ function toggleUpdating() {
 function getCountdownDay(launch) {
     
     var epoch = launch['launchtime_epoch'] * 1000;
-    var win_epoch = launch['windowcloses_epoch'] * 1000;
-    
     var date = new Date(epoch);
     var date_now = new Date();
     
-    var date_closes = new Date(win_epoch);
-    
-    var overWeek = Math.abs((date.getTime() - date_now.getTime())) >= (518400 * 1000);
-    //var overWeek = Math.abs((date_now.getTime() - date.getTime())) >= 604800;
+    var week = Math.abs((date.getTime() - date_now.getTime())) >= (518400 * 1000);
     var delayed = launch['delayed'];
     var monthonly = launch['monthonlyeta'];
-    //console.log(overWeek+ " / "+(date.getTime() - date_now.getTime()));
     
-    if (overWeek || delayed || monthonly) { 
-    
-        //console.log(launch['vehicle']+" / "+launch['payload']+" : "+overWeek+" / "+delayed+" / "+monthonly);
-        
-        var time = pad(applyMilitary(date.getHours()))+":"+pad(date.getMinutes())+(date.getSeconds() > 0 ? ":"+pad(date.getSeconds()) : "");
-        var month = MONTHS_LONG[date.getMonth()];
-        var day = ord(date.getDate());
-        if (epoch < win_epoch && !delayed && !HISTORY_MODE) {
-            
-            if (date_closes.getDay() > date.getDay()) {
-                month = MONTHS[date.getMonth()];
-                var _time = "&dash;"+pad(applyMilitary(date_closes.getHours()))+":"+pad(date_closes.getMinutes())+(date_closes.getSeconds() > 0 ? ":"+pad(date_closes.getSeconds()) : "");
-                var month = MONTHS[date_closes.getMonth()];
-                day += _time+", "+month+" "+ord(date_closes.getDate());
-                
-            }
-            else {
-                time += "&dash;"+pad(applyMilitary(date_closes.getHours()))+":"+pad(date_closes.getMinutes())+(date_closes.getSeconds() > 0 ? ":"+pad(date_closes.getSeconds()) : "");
-            }
-            
+    if (delayed || monthonly) {
+        if (monthonly) {
+            return LAUNCH_NOEARLIERTHAN_HTML+MONTHS_LONG[date.getMonth()];
         }
-
+        return MONTHS_LONG[date.getMonth()]+" "+ord(date.getDate());
+    }
+    else if (week) {
         
-        if (delayed || monthonly) { return month+(!monthonly?" "+day:""); }
+        var time = pad(applyMilitary(date.getHours()))+":"+pad(date.getMinutes())+":"+pad(date.getSeconds());
+        if (time.endsWith(":00"))
+            time = time.substr(0, time.length - 3);
         
-        return time+", "+month+" "+day+(date.getYear() != date_now.getYear() && HISTORY_MODE ? " "+date.getFullYear() : "")+(date.dst()?LAUNCH_DAYLIGHTSAVINGS_HTML:"");
-    
+        var day = MONTHS_LONG[date.getMonth()]+" "+ord(date.getDate());
+        
+        return time+" "+day;
     }
     else {
-        var time = pad(applyMilitary(date.getHours()))+":"+pad(date.getMinutes())+(date.getSeconds() > 0 ? ":"+pad(date.getSeconds()) : "");
-        
         var dayDiff = date.getDate() - date_now.getDate();
-        var day = (dayDiff == 0 ? "Today" : (dayDiff == 1 ? "Tomorrow" : (dayDiff == -1 ? "Yesterday" : DAYS[date.getDay()])));
+        var dayDesc = {"-1": "Yesterday", "0": "Today", "1": "Tomorrow"};
+        var day = (dayDiff > -2 && dayDiff < 2 ? dayDesc[dayDiff] : DAYS[date.getDay()]);
         
-        if (epoch < win_epoch) {
-            
-            if (date_closes.getDay() > date_now.getDay()) {
-                
-                /*var _dayDiff = date_closes.getDate() - date_now.getDate();
-                var _day = (_dayDiff == 0 ? "Today" : (_dayDiff == 1 ? "Tomorrow" : DAYS[date_closes.getDay()]));
-                var _time = "&dash;"+pad(applyMilitary(date_closes.getHours()))+":"+pad(date_closes.getMinutes())+(date_closes.getSeconds() > 0 ? ":"+pad(date_closes.getSeconds()) : "");
-                
-                day += _time+" "+_day;*/
-                
-            }
-            else {
-                time += "&dash;"+pad(applyMilitary(date_closes.getHours()))+":"+pad(date_closes.getMinutes())+(date_closes.getSeconds() > 0 ? ":"+pad(date_closes.getSeconds()) : "");
-            }
-            
-        }
+        var time = pad(applyMilitary(date.getHours()))+":"+pad(date.getMinutes())+":"+pad(date.getSeconds());
+        if (time.endsWith(":00"))
+            time = time.substr(0, time.length - 3);
         
         return time+" "+day;
     }
@@ -647,6 +628,32 @@ function getCountdownString(secs) {
     return time;
 }
 
+function getWindowString(launch) {
+    
+    if (launch['delayed'] || launch['monthonlyeta']) return "Unknown";
+    
+    var open = launch['windowopens_epoch'];
+    var close = launch['windowcloses_epoch'];
+    if (close == undefined || open == close) { return "Instantaneous"; }
+    var wString = getCountdownString(close - open);
+    if (wString.endsWith(":00"))
+        wString = wString.substr(0, wString.length - 3);
+    
+    var date = new Date(launch['windowopens_epoch'] * 1000);
+    
+    var dateStr1 = pad(applyMilitary(date.getHours()))+":"+pad(date.getMinutes())+":"+pad(date.getSeconds());
+    if (dateStr1.endsWith(":00"))
+        dateStr1 = dateStr1.substr(0, dateStr1.length - 3);
+    
+    date = new Date(launch['windowcloses_epoch'] * 1000);
+    
+    var dateStr2 = pad(applyMilitary(date.getHours()))+":"+pad(date.getMinutes())+":"+pad(date.getSeconds());
+    if (dateStr2.endsWith(":00"))
+        dateStr2 = dateStr2.substr(0, dateStr2.length - 3);
+    
+    return dateStr1+"&dash;"+dateStr2+" ("+wString+")";
+}
+
 function checkVersion() {
     var currentVersion = $('meta[name=version]').attr("content");
     var pageType = window.location.href.split('?')[0].split('/launchschedule/')[1].slice(0, -1);
@@ -676,4 +683,19 @@ function createSettings() {
     }
     settingsHTML += "</td></table>";
     $(".optionsCheckboxes").html(settingsHTML);
+}
+
+function spawnPopup() {
+    var id = popupNextID++;
+    var popupHTML = "<div class=\"popup\" id=\"popup-"+id+"\"><iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/FCCyVCvN2bo\" frameborder=\"0\" allowfullscreen></iframe></div>";
+    var elm = (id == 0 ? $(".topBar") : $("#popup-"+(id-1)));
+    $(popupHTML).insertAfter(elm);
+    $(".popup").css("overflow: hidden");
+    $("#popup-"+id).dialog(
+        {
+            width: "auto",
+            height: "auto",
+            title: "Some super awesome livestream"
+        }
+    );
 }
