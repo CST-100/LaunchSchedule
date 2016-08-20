@@ -313,7 +313,7 @@ function updatePageInfo() {
             
         thisHTML += "</div>"; // Close left side bottom
             
-        if (launch['hasStream'] || "url" in launch) {
+        if (launch['hasStream'] || "url" in launch || launch['hasPressKit'] || launch['hasWeather']) {
                 
             thisHTML += "<div class=\"right\">"; // Open bottom right side
         
