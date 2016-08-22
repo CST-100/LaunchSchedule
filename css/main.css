@@ -544,8 +544,8 @@ a.updateNotification {
 }
 
 div.updateNotification { 
-    min-width: 40em;
-    max-width: 60em;
+    min-width: 64em;
+    max-width: 64em;
     margin: 2em auto 0 auto;
     text-align: center;
     clear: both;

@@ -361,8 +361,6 @@ function updatePageInfo() {
         
         fullHTML += thisHTML;
         
-        console.log(fullHTML);
-        
     }
     
     if (displayResults == 0) { fullHTML = "The search came up empty: "+$(".searchBox").val(); }
