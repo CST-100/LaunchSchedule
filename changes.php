@@ -31,9 +31,7 @@
     <div class="page">
     
         <div class="no-history">
-        
             Acquiring history data, please stand by...
-        
         </div>
         
     </div>
