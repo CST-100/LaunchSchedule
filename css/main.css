@@ -178,7 +178,7 @@ span.updateTimer {
     max-width: 2.26em;
     text-align: left;
     display: inline-block;
-    padding-right: 5px;
+    padding-right: 0.625em;
     cursor: help;
     display: table-cell;
 }
@@ -681,6 +681,7 @@ div.launch.holding div.launch-icons i.fa-clock-o {
 }
 
 i.APIError {
+    opacity: 0.0;
     color: red;
     padding-right: 0.5em;
     display: table-cell;
