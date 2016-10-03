@@ -72,13 +72,16 @@ div.change-list {
     padding-left: 3em;
     overflow-x: auto;
     overflow-y: hidden;
-    width: 41em;
-    min-width: 41em;
-    max-width: 41em;
+    width: 52.4em;
+    min-width: 52.4em;
+    max-width: 52.4em;
+    white-space: nowrap;
+    font-size: 0.8em;
 }
 
 span.change-entry {
     display: block;
+    margin-bottom: 0.3em;
 }
 
 span.code {
