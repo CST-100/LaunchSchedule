@@ -1,0 +1,136 @@
+@charset "utf-8";
+
+html {
+    background-color: #333;
+}
+
+body, html {
+	min-height: 100%;
+    margin: 0 auto;
+	font-family: 'Futura', sans-serif;
+	cursor: default;
+    background-image: url(../bg/bg.jpg);
+    font-size: 16px;
+    font-weight: bold;
+    color: bisque;
+}
+
+div.page {
+    background-color: #333;
+    box-shadow: 0 0 10px #000;
+    border: 1px solid #777;
+    width: 80%;
+    margin: 2em auto;
+    padding: 1em;
+}
+
+div.change-entry:first-child {
+    margin-top: 2em;
+}
+
+div.change-entry:last-child {
+    margin-bottom: 2em;
+}
+
+div.change-entry:not(:last-child) {
+    border-bottom: 1px solid #aaa;
+    padding-bottom: 1em;
+}
+
+div.change-entry:not(:first-child) {
+    padding-top: 1em;
+}
+
+div.change-entry {
+    width: 90%;
+    margin: 0 auto;
+}
+
+div.change-entry > div {
+    display: table-cell;
+}
+
+div.change-type > span, div.change-data > span {
+    display: block;
+}
+
+div.change-data > span {
+    margin-bottom: .2em;
+}
+
+div.change-type {
+    padding-right: 1em;
+    border-right: 1px solid #aaa;
+}
+
+div.change-data {
+    padding-left: 1em;
+}
+
+div.change-list {
+    margin-top: 1.5em;
+    padding-left: 3em;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 41em;
+    min-width: 41em;
+    max-width: 41em;
+}
+
+span.change-entry {
+    display: block;
+}
+
+span.code {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    background: #444;
+    border-radius: 3px;
+    padding: .1em;
+    font-weight: bold;
+}
+
+span.change-old-value {
+    background: pink;
+    color: red;
+}
+
+span.change-new-value {
+    background: lightgreen;
+    color: green;
+}
+
+span.change-date-string {
+    font-size: .7em;
+    color: #666;
+}
+
+div.no-history {
+    text-align: center;
+    margin: 0 auto;
+}
+
+div.schedule-link {
+    width: 15em;
+    padding: 2em;
+    background-image: url("../bg/lbg2.png");
+    border-bottom-right-radius: 1em;
+    border-top-right-radius: 1em;
+    margin-top: 2em;
+}
+
+div.schedule-link > a {
+    text-decoration: none;
+    margin: 0 auto;
+    text-align: center;
+    cursor: pointer;
+    -o-transition:.5s;
+    -ms-transition:.5s;
+    -moz-transition:.5s;
+    -webkit-transition:.5s;
+    transition:.5s;
+    color: bisque;
+}
+
+div.schedule-link > a:hover {
+    color: crimson;
+}

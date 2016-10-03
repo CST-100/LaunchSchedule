@@ -69,9 +69,9 @@ div.footer {
 
 div.topBar {
     z-index: 9001;
-    max-height: 30px;
+    max-height: 1.875em;
     width: 100%;
-    line-height: 30px;
+    line-height: 1.875em;
     box-shadow: 0 0 5px #000;
     color: bisque;
     display: flex;
@@ -102,11 +102,11 @@ div.titleAndStatus {
 }
 
 div.pageControls img.loadIndicator {
-    float: left;
+    /*float: left;*/
     width: 15px;
     height: 15px;
     padding-top: 8px;
-    padding-right: 5px;
+    padding-right: 0.5em;
     text-shadow: 0 0 5px #000;
 }
 
@@ -116,18 +116,42 @@ div.pageControls {
     width: auto;
     /*float: right;*/
     text-align: right;
+    display: table;
 }
 
-.controlButton {
+div.pageControls > * {
+    display: table-cell;
+}
+
+/*.controlButton {
     min-width: 30px;
     max-width: 165px;
     height: 30px;
-    float: left;
-    text-align: center;
+    /*float: left;*/
+    /*display: table-cell;*/
+    /*text-align: center;
     cursor: pointer;
     line-height: 32px;
     /*color: #fff;*/
-    text-shadow: 0 0 5px #000;
+    /*text-shadow: 0 0 5px #000;
+    padding: 0 5px 0px 5px;
+}*/
+
+span.controlButton, i.controlButton {
+    height 1.875em;
+    display: table-cell;
+    text-align: center;
+    padding-right: 0.5em;
+    text-shadow: 0 0 0.4em #000;
+    cursor: pointer;
+}
+
+span.controlButton:first-child, i.controlButton:first-child {
+    padding-left: 0.5em;
+}
+
+.controlButton > a {
+    text-decoration: none;
 }
 
 .historyButton {
@@ -140,16 +164,8 @@ div.pageControls {
 }
 
 i.playPause {
-    line-height: 31px;
-    padding: 0;
-}
-
-.controlButton {
-    padding: 0 5px 0px 5px;
-}
-
-.betaButton a {
-    text-decoration: none;
+    line-height: 1.875em;
+    display: table-cell;
 }
 
 span.updateTimer {
@@ -164,6 +180,7 @@ span.updateTimer {
     display: inline-block;
     padding-right: 5px;
     cursor: help;
+    display: table-cell;
 }
 
 /*i.controlButton:hover {
@@ -173,21 +190,26 @@ span.updateTimer {
 /*}*/
 
 
-div.searchHugger {
-    float: left;
+/*div.searchHugger {
     background: #fff;
     border-radius: 20px;
     height: 30px;
     margin-right: 5px;
-}
+}*/
 
-input[type=text].searchBox {
-    height: 15px;
+input[type=search].searchBox {
+height: 25px;
     border: none;
     padding: 5px 5px 5px 5px;
     vertical-align: middle;
-    margin-left: 7px;
-    width: 180px;
+    /* margin-left: 7px; */
+    width: 230px;
+    margin-top: -4px;
+}
+
+div.searchClear {
+    min-width: 1em;
+    display: inline;
 }
 
 i.searchClear {
@@ -195,6 +217,7 @@ i.searchClear {
     margin-left: -6px;
     cursor: pointer;
     color: #777;
+    display: none;
 }
 
 /* Options "GUI" */
@@ -297,21 +320,6 @@ div.launch span.tag {
     /*line-height: 0.7em;*/
     height: 0.1em;
     max-height: 0.7em;
-}
-
-div.launch span.tag[data-title="ISS Resupply"] {
-    background-color: #CFF09E;
-}
-
-div.launch span.tag[data-title="Barge landing"] {
-    background-color: #1C6BA0;
-}
-
-div.launch span.tag[data-title="Manned flight"] {
-    /*background-color: #eebb99;*/
-    background: #eebb99; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #eebb99, #8B4513); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #eebb99, #8B4513); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera */
 }
 
 div.launches.single {
@@ -555,4 +563,126 @@ div.updateNotification {
     color: #1d9d74;
     padding: 0.5em;
     display: none;
+}
+
+div.launch-icons {
+    width: 2em;
+    max-width: 2em;
+    min-width: 2em;
+    display: table-cell;
+}
+
+div.launch-icons > i.fa {
+    text-align: center;
+    display: block;
+    min-height: 1.15em;
+}
+
+div.launch-icons > i.fa:not(:last-child) {
+    margin-bottom: 0.1em;
+}
+
+div.vertical-separator {
+    border-right: 1px solid #888;
+    height: 80%;
+    width: 1px;
+    max-width: 1px;
+    display: table-cell;
+}
+
+div.launch-data {
+    display: table-cell;
+    padding-left: 0.6em;
+}
+
+div.launch-data > span.launch-data {
+    min-height: 1.15em;
+    max-height: 1.15em;
+    display: block;
+    margin-bottom: 0.1em;
+}
+
+div.data-tags, div.data-links {
+    border-top: 1px solid #aaa;
+    text-align: center;
+    display: block;
+}
+
+div.data-tags-links > div:first-child {
+    margin-bottom: 0.1em;
+    margin-top: 0.3em;
+}
+
+div.data-tags-links > div:not(:first-child) {
+    margin-top: 0.3em;
+}
+
+div.data-tags > span.data-tag {
+    background-color: bisque;
+    color: #000;
+    font-size: 0.5em;
+    border: 1px solid #000;
+    padding: 3px;
+    display: inline-block;
+}
+
+div.data-links {
+    padding-top: 0.2em;
+}
+
+div.launch span.data-tag[data-title="ISS Resupply"] {
+    background-color: #CFF09E;
+}
+
+div.launch span.data-tag[data-title="Barge landing"] {
+    background-color: #1C6BA0;
+}
+
+div.launch span.data-tag[data-title="Manned flight"] {
+    /*background-color: #eebb99;*/
+    background: #eebb99; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #eebb99, #8B4513); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #eebb99, #8B4513); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera */
+}
+
+div.launch.active div.launch-icons i.fa-clock-o/*, div.launch.feature.active div.launch-icons i.fa-clock-o*/ {
+    animation: active 1s infinite alternate;
+}
+
+div.launch.holding div.launch-icons i.fa-clock-o {
+    animation: holding 1s infinite alternate;
+}
+
+@keyframes active {
+    from{
+        text-shadow: 0px 0px 0px lime;
+    }
+    to{
+        text-shadow: 0px 0px 20px lime;
+    }
+}
+
+@keyframes holding {
+    from{
+        text-shadow: 0px 0px 0px orange;
+    }
+    to{
+        text-shadow: 0px 0px 20px orange;
+    }
+}
+
+@keyframes apierror {
+    from {
+        text-shadow: 0 0 0 white;
+    }
+    to {
+        text-shadow: 0 0 20px white;
+    }
+}
+
+i.APIError {
+    color: red;
+    padding-right: 0.5em;
+    display: table-cell;
+    animation: apierror 0.5s infinite alternate;
 }

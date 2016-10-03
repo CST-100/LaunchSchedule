@@ -60,6 +60,10 @@ var IS_INSIDE_LAUNCH = false;
 var IS_DEBUG = false;
 var SHOWMORE_DEFAULT_HTML = "<i class=\"fa fa-caret-down fa-fw\"></i>Show more launches<i class=\"fa fa-caret-down fa-fw\"></i>";
 var SHOW_MORE_VISIBLE = false;
+var ACTIVE_LAUNCH_THRESHOLD = 86400;
+var VERSION_CHECK_EVENT_ID = 0;
+var MAIN_CLOCK_EVENT_ID = 0;
+var LAST_UPDATE_ERRORED = function() { return $("i.APIError").css('opacity') > 0 }();
 
 var SEARCH_GO_FUNCTION = function() { $(".loadIndicator").fadeIn(function() { updatePageInfo(); }); };
 var SEARCH_INTERVAL_ID = 0;
@@ -77,7 +81,8 @@ $(document).ready(
         /*setGradientBackground();*/
         createSettings();
         $(".searchBox").on("input propertychange paste", function() {
-            //console.log("---> "+$(".searchBox").val());
+            /*if ($(".searchBox").val() == "") { $("i.searchClear").fadeOut(); }
+            else { $("i.searchClear").fadeIn(); }*/
             if (SEARCH_INTERVAL_ID != 0) { clearInterval(SEARCH_INTERVAL_ID); }
             SEARCH_INTERVAL_ID = setInterval(SEARCH_GO_FUNCTION, 500);
         })
@@ -124,7 +129,7 @@ $(document).ready(
         if (HISTORY_MODE) { HISTORY_MODE = false; switchMode(); }
         else { getAPIData(); }
         if (!SINGLE_MODE) {
-            setInterval(checkVersion, 1800000); /* 30 minutes */
+            VERSION_CHECK_EVENT_ID = setInterval(checkVersion, 1800000); /* 30 minutes */
         }
     }
 );
@@ -150,7 +155,12 @@ function switchMode() {
         }
     );
     ANIMATE_UPDATE = true;
-    $(".loadIndicator").fadeIn(function() { getAPIData(); });
+    $(".loadIndicator").animate(
+        {
+            opacity: 1.0
+        },
+        function() { getAPIData(); }
+    );
     $(".pageTitle").fadeIn();
 }
 
@@ -208,10 +218,16 @@ function getAPIData() {
             UPDATE_IN_PROGRESS = false;
             PAGE_UPDATE_IN = TIME_BETWEEN_UPDATES;
             /*$(".loadIndicator").fadeOut();*/
+            $("i.APIError").animate({ opacity: 0.0 });
 
 	})
     .fail(
         function(xhr) {
+            $("i.APIError").animate({ opacity: 1.0 });
+            $(".loadIndicator").animate(
+            {
+                opacity: 0.0
+            });
             UPDATE_IN_PROGRESS = false;
             PAGE_UPDATE_IN = TIME_BETWEEN_UPDATES;
         });
@@ -235,8 +251,11 @@ function updatePageInfo() {
         var id = x + 1;
         var thisHTML = "";
         var featured = /*x == 0*/num < 1;
+        var d = new Date();
+		var secs = Math.floor(((launch['launchtime_epoch'] * 1000) - d.getTime()) / 1000);
         
         var delayed = launch['delayed'];
+        var holding = launch['holding'];
         
         if (!featured) { col++; } // Increment "column" number if we're not rendering featured
         
@@ -250,74 +269,82 @@ function updatePageInfo() {
         }
     
         //console.log("------> "+col);
-        thisHTML += "<div class=\"launchContainer\">"; // Open launch contriner
+        thisHTML += "<div class=\"launchContainer\">"; // Open launch container
         
-        thisHTML += "<div class=\"launch"+(featured?" featured":" small")+(delayed && !SINGLE_MODE?" net":"")+(SINGLE_MODE ?  " single" : "")+"\">"; // Open launch div
+        var launchClasses = "launch";
+        if (featured)
+            launchClasses += " featured";
+        else
+            launchClasses += " small";
+        
+        if (delayed && !SINGLE_MODE)
+            launchClasses += " net";
+        
+        if (SINGLE_MODE)
+            launchClasses += " single";
+        
+        if (secs <= ACTIVE_LAUNCH_THRESHOLD && secs >= INSIDE_LAUNCH_MIN && !holding)
+            launchClasses += " active";
+        else if (secs <= ACTIVE_LAUNCH_THRESHOLD && secs >= INSIDE_LAUNCH_MIN && holding)
+            launchClasses += " holding";
+        
+        thisHTML += "<div class=\""+launchClasses+"\">"; // Open launch div
             
         
-        thisHTML += "<div class=\"top\">"; // Open top div
-            
-        thisHTML += "<span class=\"rocket-"+id+"\">"; // open rocket
-        thisHTML += launch['vehicle'];
-             
-        /*thisHTML += "<span class=\"location-"+id+"\">"; // open location
-        thisHTML += "&nbsp;from: "+launch['location'];
-        thisHTML += "</span>"; // close location*/
-        // ^^ Doesn't look right, will maybe revisit
+        thisHTML += "<div class=\"launch-icons\">"; // Open launch-icons div
+        
+        thisHTML += "<i class=\"rocket-"+id+" fa fa-rocket\"></i>";
+        thisHTML += "<i class=\"payload-"+id+" fa fa-gift\"></i>";
+        thisHTML += "<i class=\"countdown-"+id+" fa fa-clock-o\"></i>";
+        thisHTML += "<i class=\"location-"+id+" fa fa-map-marker\"></i>";
+        thisHTML += "<i class=\"provider-"+id+" fa fa-user\"></i>";
+        
+        thisHTML += "</div>"; // Close launch-icons div
+        
+        thisHTML += "<div class=\"vertical-separator\"></div>";
+        
+        thisHTML += "<div class=\"launch-data\">"; // Open data div
+        
+        thisHTML += "<span class=\"launch-data data-rocket-"+id+"\">"+launch["vehicle"]+"</span>";
+        thisHTML += "<span class=\"launch-data data-payload-"+id+"\">"+launch["payload"]+"</span>";
+        var countdownstring = "";
+        if (!FIRST_UPDATE) {
+            countdownstring = checkCountdownLength(id, $("span.data-countdown-"+id).html());
+        }
+        thisHTML += "<span class=\"launch-data data-countdown-"+id+"\">"+countdownstring+"</span>";
+        //thisHTML += "<span class=\"launch-data data-location-"+id+"\"><a class=\"google-maps\" href=\"//google.co.uk/maps/search/"+encodeURIComponent(launch["location"])+"\" target=\"_blank\">"+launch["location"]+"</a></span>";
+        thisHTML += "<span class=\"launch-data data-location-"+id+"\">"+launch["location"]+"</span>";
+        thisHTML += "<span class=\"launch-data data-provider-"+id+"\">"+launch["provider"]+"</span>";
+        
+        thisHTML += "</div>"; // Close data div
         
         
-        thisHTML += "</span>"; // close rocket
+        thisHTML += "<div class=\"data-tags-links\">"; // Open tags and links div
         
-            
-        thisHTML += "<span class=\"payload-"+id+"\">";
-        thisHTML += launch['payload'];
-        thisHTML += "</span>";
-            
-        thisHTML += "</div>"; // Close top div
-        
-        var placeTagsDiv = (!featured || (featured && launch['hasTags']));
-        if (placeTagsDiv) thisHTML += "<div class=\"tags\">"; // Open tags div
-
         if (launch['hasTags']) {
             
+            thisHTML += "<div class=\"data-tags\">";
+            //thisHTML += "<hr />";
             
             var t = launch['tags'];
             t.forEach(function(e) { 
                 
-                thisHTML += "<span class=\"tag"+("titletext" in e ? " hoverable" : "")+"\""+("colour" in e ? " style=\"background-color: "+e['colour']+";\"" : "")+("titletext" in e ? "title=\""+e['titletext']+"\"" : "")+" data-title=\""+e['text']+"\">"; // Open tag span
+                thisHTML += "<span class=\"data-tag"+("titletext" in e ? " hoverable" : "")+"\""+("colour" in e ? " style=\"background-color: "+e['colour']+";\"" : "")+("titletext" in e ? "title=\""+e['titletext']+"\"" : "")+" data-title=\""+e['text']+"\">"; // Open tag span
                 thisHTML += e['text'];
                 thisHTML += "</span>"; // Close tag span
                 
             });
             
-            
+            thisHTML += "</div>";
+             
         }
         
-        if (placeTagsDiv) thisHTML += "</div>"; // Close tags div
-            
-        thisHTML += "<div class=\"bottom\">"; // Open bottom div
-            
-        thisHTML += "<div class=\"left\">"; // Left side of bottom div
-            
-        thisHTML += "<span class=\"countdown-"+id+"\">";
-        if (FIRST_UPDATE) { thisHTML += "Calculating..."; }
-        else { thisHTML += ($(".countdown-"+id).text() == "" ? "Calculating..." : checkCountdownLength(id, $(".countdown-"+id).html())); }
-        thisHTML += "</span>";
-        if (!launch['delayed'] && !launch['monthonlyeta']) {
-            thisHTML += "<span class=\"windowinfo-"+id+"\">" // Open window info span
-        
-            thisHTML += getWindowString(launch);
-        
-            thisHTML += "</span>"; // close window info span
-        }
-            
-        thisHTML += "</div>"; // Close left side bottom
-            
         if (launch['hasStream'] || "url" in launch || launch['hasPressKit'] || launch['hasWeather']) {
-                
-            thisHTML += "<div class=\"right\">"; // Open bottom right side
-        
-            thisHTML += "<span class=\"links-"+id+"\">";
+            
+            var streamHTLM = "";
+            var validLinks = 0;
+            streamHTLM += "<div class=\"data-links\">";
+            //thisHTML += "<hr />";
                 
             if (launch['hasStream']) {
                 var arr = launch['streamURLs'];
@@ -327,33 +354,37 @@ function updatePageInfo() {
                     if (!isYoutube && HISTORY_MODE) { return; }
                     var buttonClass = (isYoutube ? "fa-youtube-play" : "fa-tv");
                     //if (isYoutube) { buttonClass = "fa-youtube-play"; }
-                    
-                    thisHTML += "<a href=\""+l+"\" target=\"_blank\" title=\"Watch launch coverage\"><i class=\"launchIcon launchStream fa "+buttonClass+" fa-fw\"></i></a>";
+                    validLinks++;
+                    streamHTLM += "<a href=\""+l+"\" target=\"_blank\" title=\"Watch launch coverage\"><i class=\"launchIcon launchStream fa "+buttonClass+" fa-fw\"></i></a>";
                 
                 });
             }
                 
             if ("url" in launch) {
-                thisHTML += "<a href=\""+launch['url']+"\" target=\"_blank\" title=\"View payload information\"><i class=\"launchIcons payloadInfo fa fa-info-circle fa-fw\"></i></a>";
+                validLinks++;
+                streamHTLM += "<a href=\""+launch['url']+"\" target=\"_blank\" title=\"View payload information\"><i class=\"launchIcons payloadInfo fa fa-info-circle fa-fw\"></i></a>";
             }
             if (launch['hasWeather']) {
                 
-                thisHTML += "<a href=\""+launch['weatherURL']+"\" target=\"_blank\" title=\"View weather report\"><i class=\"launchIcon launchWeather fa fa-cloud fa-fw\"></i></a>";
+                validLinks++
+                streamHTLM += "<a href=\""+launch['weatherURL']+"\" target=\"_blank\" title=\"View weather report\"><i class=\"launchIcon launchWeather fa fa-cloud fa-fw\"></i></a>";
                 
             }
             if (launch['hasPressKit']) {
                 
-                thisHTML += "<a href=\""+launch['pressKitURL']+"\" target=\"_blank\" title=\"View presskit\"><i class=\"launchIcon launchPressKit fa fa-file-text fa-fw\"></i></a>";
+                validLinks++;
+                streamHTLM += "<a href=\""+launch['pressKitURL']+"\" target=\"_blank\" title=\"View presskit\"><i class=\"launchIcon launchPressKit fa fa-file-text fa-fw\"></i></a>";
                 
             }
                 
-            thisHTML += "</span>";
                 
-            thisHTML += "</div>"; // Close bottom right side
+            streamHTLM += "</div>";
+            if (validLinks > 0 )
+                thisHTML += streamHTLM;
                 
         }
-                    
-        thisHTML += "</div>"; // Close bottom div
+        
+        thisHTML += "</div>"; // close tags and links div
             
         thisHTML += "</div>"; // Close launch div
         
@@ -380,11 +411,14 @@ function updatePageInfo() {
         $(".launches").fadeIn();
         updateTimers();
         if (FIRST_UPDATE) {
-            setInterval(updateTimers, 1000);
+            MAIN_CLOCK_EVENT_ID = setInterval(updateTimers, 1000);
         }
         FIRST_UPDATE = false;
     }
-    $(".loadIndicator").fadeOut();
+    $(".loadIndicator").animate(
+    {
+        opacity: 0.0
+    });
     if (RESULT_COUNT < MAX_RESULTS && !SHOW_MORE_VISIBLE && !SINGLE_MODE) { SHOW_MORE_VISIBLE = true; $(".showMore").slideToggle(); }
 
 }
@@ -499,6 +533,7 @@ function updateTimers() {
 		if (launch['holding']) { // launch is holding
 
 			in_launch = true;
+            $("span.data-countdown-"+id).parent().parent().removeClass("active").addClass("holding");
             var holding_string = LAUNCH_COUNTDOWN_HOLDING_STRING;
             if (launch['launchtime_epoch'] != launch['windowcloses_epoch'] && launch['windowcloses_epoch'] != undefined) {
                 var w = launch['windowcloses_epoch'] * 1000;
@@ -507,7 +542,7 @@ function updateTimers() {
                 if (wSecs <= 0) { wCloseTime = "CLOSED"; }
                 holding_string += " ("+LAUNCH_WINDOW_CLOSES_HTML+"<span class=\"launch-WindowTimer\"> "+wCloseTime+"</span>)";
             }
-			$(".countdown-"+id).html(holding_string);
+			$("span.data-countdown-"+id).html(holding_string);
             active_launches++;
 			continue;
 
@@ -515,7 +550,7 @@ function updateTimers() {
 
 		if (launch['delayed']) { // launch is delayed
 
-			$(".countdown-"+id).html((!launch['monthonlyeta']?LAUNCH_NOEARLIERTHAN_HTML:"")+" "+getCountdownDay(launch));
+			$("span.data-countdown-"+id).html((!launch['monthonlyeta']?LAUNCH_NOEARLIERTHAN_HTML:"")+" "+getCountdownDay(launch));
 			continue;
 
 		}
@@ -531,11 +566,13 @@ function updateTimers() {
         
         var tString = "";
         
-        if (secs > 86400) { 
+        if (secs > ACTIVE_LAUNCH_THRESHOLD) {
             var tString = getCountdownDay(launch);
-            $(".countdown-"+id).html(checkCountdownLength(id, tString));
+            $("span.data-countdown-"+id).html(checkCountdownLength(id, tString));
             continue;
         }
+        
+        $("span.data-countdown-"+id).parent().parent().addClass("active");
 
 		var time = getCountdownString(secs);
         if (launch['launchtime_epoch'] != launch['windowcloses_epoch'] && launch['windowcloses_epoch'] != undefined) {
@@ -550,14 +587,15 @@ function updateTimers() {
 		if (l) { tString += LAUNCH_COUNTDOWN_POST_LAUNCH_STRING.replace("{TIME}", time); }
 		else if (secs < LAUNCH_COUNTDOWN_PRE_LAUNCH_THRESHOLD) { tString += LAUNCH_COUNTDOWN_PRE_LAUNCH_STRING.replace("{TIME}", time); }
 		else { tString = time; }
+
 		
 		//console.log("---> "+tString);
         if (secs >= 3600) {
             //tString = getCountdownDay(launch)+" / "+tString;
-            tString = getCountdownDay(launch)+" &dash; "+tString;
+            tString = getCountdownDay(launch)+" - "+tString;
         }
 
-		$(".countdown-"+id).html(checkCountdownLength(id, tString));
+		$("span.data-countdown-"+id).html(checkCountdownLength(id, tString));
 
 
 	}
