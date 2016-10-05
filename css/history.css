@@ -80,6 +80,22 @@ div.change-list {
     font-size: 0.8em;
 }
 
+div.list-change-list {
+    display: inline-table;
+}
+
+div.list-change-list > span {
+    display: block;
+}
+
+div.list-change-list span > i {
+    margin-right: 0.2em;
+}
+
+div.list-change-list > span:not(:first-child) {
+    margin-top: 0.1em;
+}
+
 span.change-entry {
     display: block;
     margin-bottom: 0.3em;
@@ -93,12 +109,12 @@ span.code {
     font-weight: bold;
 }
 
-span.change-old-value {
+span.change-old-value, span.list-change-item-removed {
     background: pink;
     color: red;
 }
 
-span.change-new-value {
+span.change-new-value, span.list-change-item-added {
     background: lightgreen;
     color: green;
 }

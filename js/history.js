@@ -89,6 +89,22 @@ function getChangeData() {
                         if (k == "windowclose" || k == "windowopens" || k == "launchtime") {
                             html += code(k)+": "+formatTimes(e["changes"][k]["old"], true)+" <i class=\"fa fa-long-arrow-right\"></i> "+formatTimes(e["changes"][k]["new"], false);
                         }
+                        else if (k == "tags" || k == "streamurl") {
+                            html += code(k)+": ";
+                            html += "<div class=\"list-change-list\">";
+                            console.log(e["changes"][k]["added"]);
+                            for (var lc in e["changes"][k]["added"]) {
+                                var _s = e["changes"][k]["added"][lc];
+                                html += "<span class=\"code list-change-item-added\"><i class=\"fa fa-plus-circle\"></i>"+_s+"</span>";
+                            }
+                            
+                            for (var lc in e["changes"][k]["removed"]) {
+                                var _s = e["changes"][k]["removed"][lc];
+                                html += "<span class=\"code list-change-item-removed\"><i class=\"fa fa-minus-circle\"></i>"+_s+"</span>";
+                            }
+                            
+                            html += "</div>";
+                        }
                         else {
                             html += code(k)+": "+old(e["changes"][k]["old"])+" <i class=\"fa fa-long-arrow-right\"></i> "+_new(e["changes"][k]["new"]);
                         }

@@ -635,9 +635,10 @@ function updateTimers() {
 }
 
 function checkCountdownLength(id, data) {
+    if (data == undefined) { return ""; }
     var length = (data.indexOf(LAUNCH_DAYLIGHTSAVINGS_HTML) > -1 ? data.length - LAUNCH_DAYLIGHTSAVINGS_HTML.length : data.length);
     if (id > 1 && length >= 35 && $(".countdown-"+id).hasClass("smallText") == false) {
-        $(".countdown-"+id).addClass("smallText");
+        $(".data-countdown-"+id).addClass("smallText");
     }
     return data;
 }
