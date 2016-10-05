@@ -342,7 +342,8 @@ div.launch {
     padding: 0.3125em;
     width: /*70%*/73.25em;
     font-size: 1.25em;
-    color: bisque
+    color: bisque;
+    z-index: 9999;
     
 }
 
@@ -365,6 +366,8 @@ div.launch.small {
 
 div.launch {
     margin-top: 1.25em;
+    position: relative;
+    z-index: 9998;
 }
 
 div.launch.featured
@@ -468,7 +471,7 @@ div.launch span[class^='countdown'] {
     -webkit-flex: 1;
 }
 
-div.launch span[class^='countdown'].smallText {
+div.launch div.launch-data span[class^='data-countdown'].smallText {
     font-size: 0.85em;
     min-height: 1em;
 }
@@ -570,6 +573,7 @@ div.launch-icons {
     max-width: 2em;
     min-width: 2em;
     display: table-cell;
+    font-size: 0.7em;
 }
 
 div.launch-icons > i.fa {
@@ -593,6 +597,7 @@ div.vertical-separator {
 div.launch-data {
     display: table-cell;
     padding-left: 0.6em;
+    font-size: 0.7em;
 }
 
 div.launch-data > span.launch-data {
@@ -606,6 +611,11 @@ div.data-tags, div.data-links {
     border-top: 1px solid #aaa;
     text-align: center;
     display: block;
+}
+
+div.launch.featured div.data-tags, div.launch.featured div.data-links {
+    font-size: 0.7em;
+    z-index: 9999;
 }
 
 div.data-tags-links > div:first-child {
@@ -645,29 +655,35 @@ div.launch span.data-tag[data-title="Manned flight"] {
     background: linear-gradient(to right, #eebb99, #8B4513); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera */
 }
 
-div.launch.active div.launch-icons i.fa-clock-o/*, div.launch.feature.active div.launch-icons i.fa-clock-o*/ {
-    animation: active 1s infinite alternate;
+div.launch.active, div.launch.featured.active {
+    content: "";
+    animation: active-launch 2s infinite;
+    animation-timing-function: ease-out;
+    z-index: 9997;
 }
 
-div.launch.holding div.launch-icons i.fa-clock-o {
-    animation: holding 1s infinite alternate;
+div.launch.holding, div.launch.featured.holding {
+    content: "";
+    animation: holding-launch 2s infinite;
+    animation-timing-function: ease-out;
+    z-index: 9997;
 }
 
-@keyframes active {
-    from{
-        text-shadow: 0px 0px 0px lime;
+@keyframes active-launch {
+    from {
+        box-shadow: 0px 0px 0px rgba(0, 255, 0, 1.0) inset;
     }
     to{
-        text-shadow: 0px 0px 20px lime;
+        box-shadow: 0px 0px 1em 0.1em rgba(0, 255, 0, 0) inset;
     }
 }
 
-@keyframes holding {
-    from{
-        text-shadow: 0px 0px 0px orange;
+@keyframes holding-launch {
+    from {
+        box-shadow: 0px 0px 0px rgba(255, 150, 0, 1.0) inset;
     }
     to{
-        text-shadow: 0px 0px 20px orange;
+        box-shadow: 0px 0px 1em 0.1em rgba(255, 150, 0, 0) inset;
     }
 }
 

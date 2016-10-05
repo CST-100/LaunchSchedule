@@ -255,6 +255,7 @@ function updatePageInfo() {
 		var secs = Math.floor(((launch['launchtime_epoch'] * 1000) - d.getTime()) / 1000);
         
         var delayed = launch['delayed'];
+        var monthonly = launch["monthonlyeta"];
         var holding = launch['holding'];
         
         if (!featured) { col++; } // Increment "column" number if we're not rendering featured
@@ -283,9 +284,9 @@ function updatePageInfo() {
         if (SINGLE_MODE)
             launchClasses += " single";
         
-        if (secs <= ACTIVE_LAUNCH_THRESHOLD && secs >= INSIDE_LAUNCH_MIN && !holding)
+        if (secs <= INSIDE_LAUNCH_MAX && secs >= INSIDE_LAUNCH_MIN && !holding)
             launchClasses += " active";
-        else if (secs <= ACTIVE_LAUNCH_THRESHOLD && secs >= INSIDE_LAUNCH_MIN && holding)
+        else if (secs <= INSIDE_LAUNCH_MAX && secs >= INSIDE_LAUNCH_MIN && holding)
             launchClasses += " holding";
         
         thisHTML += "<div class=\""+launchClasses+"\">"; // Open launch div
@@ -293,11 +294,13 @@ function updatePageInfo() {
         
         thisHTML += "<div class=\"launch-icons\">"; // Open launch-icons div
         
-        thisHTML += "<i class=\"rocket-"+id+" fa fa-rocket\"></i>";
-        thisHTML += "<i class=\"payload-"+id+" fa fa-gift\"></i>";
-        thisHTML += "<i class=\"countdown-"+id+" fa fa-clock-o\"></i>";
-        thisHTML += "<i class=\"location-"+id+" fa fa-map-marker\"></i>";
-        thisHTML += "<i class=\"provider-"+id+" fa fa-user\"></i>";
+        thisHTML += "<i class=\"rocket-"+id+" fa fa-rocket\" title=\"Rocket name\"></i>";
+        thisHTML += "<i class=\"payload-"+id+" fa fa-space-shuttle\" title=\"Payload name\"></i>";
+        thisHTML += "<i class=\"countdown-"+id+" fa fa-calendar\" title=\"Launch time\"></i>";
+        if (!delayed && !monthonly)
+            thisHTML += "<i class=\"window-"+id+" fa fa-clock-o\" title=\"Launch window\"></i>";
+        thisHTML += "<i class=\"location-"+id+" fa fa-map-marker\" title=\"launch location\"></i>";
+        thisHTML += "<i class=\"provider-"+id+" fa fa-user\" title=\"Launch provider\"></i>";
         
         thisHTML += "</div>"; // Close launch-icons div
         
@@ -312,6 +315,8 @@ function updatePageInfo() {
             countdownstring = checkCountdownLength(id, $("span.data-countdown-"+id).html());
         }
         thisHTML += "<span class=\"launch-data data-countdown-"+id+"\">"+countdownstring+"</span>";
+        if (!delayed && !monthonly)
+            thisHTML += "<span class=\"launch-data data-window-"+id+"\">"+getWindowString(launch)+"</span>";
         //thisHTML += "<span class=\"launch-data data-location-"+id+"\"><a class=\"google-maps\" href=\"//google.co.uk/maps/search/"+encodeURIComponent(launch["location"])+"\" target=\"_blank\">"+launch["location"]+"</a></span>";
         thisHTML += "<span class=\"launch-data data-location-"+id+"\">"+launch["location"]+"</span>";
         thisHTML += "<span class=\"launch-data data-provider-"+id+"\">"+launch["provider"]+"</span>";
@@ -560,7 +565,7 @@ function updateTimers() {
 		var d = new Date();
 		var secs = Math.floor((e - d.getTime()) / 1000);
 		var l = secs < 0;
-		if ((secs >= INSIDE_LAUNCH_MIN && secs <= INSIDE_LAUNCH_MAX)) { active_launches++; }
+		if ((secs >= INSIDE_LAUNCH_MIN && secs <= INSIDE_LAUNCH_MAX)) { $("span.data-countdown-"+id).parent().parent().addClass("active"); active_launches++; }
         
 		secs = Math.abs(secs);
         
@@ -572,8 +577,6 @@ function updateTimers() {
             continue;
         }
         
-        $("span.data-countdown-"+id).parent().parent().addClass("active");
-
 		var time = getCountdownString(secs);
         if (launch['launchtime_epoch'] != launch['windowcloses_epoch'] && launch['windowcloses_epoch'] != undefined) {
             
@@ -688,7 +691,7 @@ function getWindowString(launch) {
     if (dateStr2.endsWith(":00"))
         dateStr2 = dateStr2.substr(0, dateStr2.length - 3);
     
-    return dateStr1+"&dash;"+dateStr2+" ("+wString+")";
+    return dateStr1+"-"+dateStr2+" ("+wString+")";
 }
 
 function checkVersion() {

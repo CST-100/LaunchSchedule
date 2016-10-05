@@ -92,7 +92,6 @@ function getChangeData() {
                         else if (k == "tags" || k == "streamurl") {
                             html += code(k)+": ";
                             html += "<div class=\"list-change-list\">";
-                            console.log(e["changes"][k]["added"]);
                             for (var lc in e["changes"][k]["added"]) {
                                 var _s = e["changes"][k]["added"][lc];
                                 html += "<span class=\"code list-change-item-added\"><i class=\"fa fa-plus-circle\"></i>"+_s+"</span>";
