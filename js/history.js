@@ -72,8 +72,21 @@ function getChangeData() {
                             if (key == "windowclose" || key == "windowopens" || key == "launchtime") {
                                 html += code(key)+": "+formatTimes(e["data"][key], false);
                             }
+                            else if (key == "tags" || key == "streamurl") {
+                                if (e["data"][key]["added"].length > 0) {
+                                    html += code(key)+": ";
+                                    html += "<div class=\"list-change-list\">";
+                                    for (var lc in e["data"][key]["added"]) {
+                                        var _s = e["data"][key]["added"][lc];
+                                        html += "<span class=\"code list-change-item-added\">"+_s+"</span>";
+                                    }
+                                    html += "</div>";
+                                }
+                            }
                             else {
-                                html += code(key)+": "+_new(e["data"][key]);
+                                if (!(e["data"][key] == "" || e["data"][key] == "null" || e["data"][key] == undefined)) {
+                                    html += code(key)+": "+_new(e["data"][key]);
+                                }
                             }
                             html += "</span>";
                             
