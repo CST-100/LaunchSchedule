@@ -578,7 +578,7 @@ function updateTimers() {
         }
         
 		var time = getCountdownString(secs);
-        if (launch['launchtime_epoch'] != launch['windowcloses_epoch'] && launch['windowcloses_epoch'] != undefined) {
+        if (launch['windowopens_epoch'] != launch['windowcloses_epoch'] && launch['windowcloses_epoch'] != undefined) {
             
             var w = launch['windowcloses_epoch'] * 1000;
             var wSecs = Math.floor((w - d.getTime()) / 1000);
