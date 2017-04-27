@@ -96,7 +96,7 @@
 
     <div class="footer">
         
-        All times are displayed in your local time. <a href="//ipeer.auron.co.uk/launchschedule/api/1/launches/" target="_blank">API data</a> will be acquired every 5 minutes when outside and every 1 minute while inside a launch.<br />Missing or outdated info? Let me know on <a class="twitter" href="https://twitter.com/iPeer" target="_blank"><i class="fa fa-twitter fa-fw"></i>Twitter</a>! All launches will be displayed until they are 1 hour past their launch time.
+        The information displayed on this website should in no way be considered to be 100% accurate; times and dates may change without notice at any time.<br />All times are displayed in your local time. <a href="//ipeer.auron.co.uk/launchschedule/api/1/launches/" target="_blank">API data</a> will be acquired every 5 minutes when outside and every 1 minute while inside a launch.<br />Missing or outdated info? Let me know on <a class="twitter" href="https://twitter.com/iPeer" target="_blank"><i class="fa fa-twitter fa-fw"></i>Twitter</a>! All launches will be displayed until they are 1 hour past their launch time.
         
         <span class="versionString">Deployed from <?php echo "<a class=\"github\" href=\"https://github.com/iPeer/LaunchSchedule/commit/".$lhash."\" target=\"_blank\"><i class=\"fa fa-github-square fa-fw\"></i>".$shash."</a>."; ?></span>
         
